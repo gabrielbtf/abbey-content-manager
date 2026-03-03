@@ -1473,6 +1473,104 @@
     font-size: 13px;
   }
 
+  /* ─── BULK ACTIONS ─── */
+  .bulk-bar {
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+    border: 1px solid #93c5fd;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    animation: slideDown 0.2s ease;
+  }
+
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .bulk-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1d4ed8;
+  }
+
+  .bulk-btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+
+  .bulk-btn-review { background: #3b82f6; color: white; }
+  .bulk-btn-review:hover { background: #2563eb; }
+  .bulk-btn-done { background: #22c55e; color: white; }
+  .bulk-btn-done:hover { background: #16a34a; }
+  .bulk-btn-deselect { background: white; color: #6b7280; border: 1px solid #d1d5db; }
+  .bulk-btn-deselect:hover { background: #f9fafb; }
+
+  .select-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    accent-color: #3b82f6;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .review-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .review-badge-submitted { background: #DBEAFE; color: #1d4ed8; }
+  .review-badge-approved { background: #DCFCE7; color: #15803d; }
+  .review-badge-needs_changes { background: #FEF3C7; color: #b45309; }
+
+  .task-card.review-submitted { border-left-color: #3b82f6 !important; }
+  .task-card.review-approved { border-left-color: #22c55e !important; }
+  .task-card.review-needs_changes { border-left-color: #f59e0b !important; }
+
+  .quick-review-btn {
+    opacity: 0;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .task-card:hover .quick-review-btn { opacity: 1; }
+  .quick-review-btn:hover { background: #2563eb; }
+
+  /* ─── HEADER GRADIENT ─── */
+  .header {
+    background: linear-gradient(to right, white 0%, rgba(232, 245, 233, 0.3) 100%);
+  }
+
+  /* ─── FILTERS BAR ENHANCEMENT ─── */
+  .filters {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    background: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
   @media (max-width: 768px) {
     .layout { flex-direction: column; }
     .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--color-border); padding: 12px; position: static; height: auto; }
@@ -2174,7 +2272,7 @@ function ReviewModal({ task, onClose, onUpdate, userEmail, addToast }) {
   );
 }
 
-function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleStar, forceExpand, userEmail, addToast, onOpenReview }) {
+function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleStar, forceExpand, userEmail, addToast, onOpenReview, isSelected, onToggleSelect }) {
   const [expanded, setExpanded] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
   const [titleDraft, setTitleDraft] = useState(task.title);
@@ -2204,11 +2302,22 @@ function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleSta
     setExpanded(!expanded);
   };
 
-  const cardClass = `task-card ${task.status === 'done' ? 'done' : ''} p-${task.priority} ${isStarred ? 'starred' : ''}`;
+  const reviewStatusClass = task.review_status === 'submitted' || task.review_status === 'resubmitted' ? 'review-submitted' : task.review_status === 'approved' ? 'review-approved' : task.review_status === 'needs_changes' ? 'review-needs_changes' : '';
+  const cardClass = `task-card ${task.status === 'done' ? 'done' : ''} p-${task.priority} ${isStarred ? 'starred' : ''} ${reviewStatusClass}`;
 
   return (
-    <div className={cardClass}>
+    <div className={cardClass} style={{ paddingLeft: task.review_status && task.review_status !== 'none' ? 18 : 16, paddingTop: 18, paddingRight: 18, paddingBottom: 18 }}>
       <div className="task-header" onClick={handleHeaderClick}>
+        <input
+          type="checkbox"
+          className="select-check"
+          checked={isSelected || false}
+          onChange={(e) => {
+            e.stopPropagation();
+            onToggleSelect && onToggleSelect();
+          }}
+          title="Select this post"
+        />
         <button
           className={`check-btn ${task.status === 'done' ? 'checked' : ''}`}
           onClick={(e) => {
@@ -2296,29 +2405,22 @@ function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleSta
             <span className="task-category">{task.category}</span>
             {task.deadline && <span className="task-deadline">📅 {task.deadline}</span>}
             {(task.image_urls || []).length > 0 && <span style={{ fontSize: 11, color: '#6B7280' }}>🖼️ {task.image_urls.length}</span>}
-            {task.review_status && task.review_status !== 'none' && (
+            {task.review_status === 'submitted' || task.review_status === 'resubmitted' ? (
+              <span className="review-badge review-badge-submitted">🔍 In Review</span>
+            ) : task.review_status === 'approved' ? (
+              <span className="review-badge review-badge-approved">✓ Approved</span>
+            ) : task.review_status === 'needs_changes' ? (
+              <span className="review-badge review-badge-needs_changes">⚠ Changes Requested</span>
+            ) : null}
+            {task.review_status === 'none' && (
               <button
+                className="quick-review-btn"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onOpenReview && onOpenReview(task.id);
-                }}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 5,
-                  padding: '3px 10px',
-                  borderRadius: 999,
-                  fontSize: 11,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  border: 'none',
-                  background: '#dbeafe',
-                  color: '#1d4ed8',
-                  transition: 'all 0.15s',
-                  fontFamily: 'inherit'
+                  onUpdate({ ...task, review_status: 'submitted' });
                 }}
               >
-                Open Review →
+                Send for Review
               </button>
             )}
           </div>
@@ -2768,6 +2870,7 @@ function App() {
   const [newCatName, setNewCatName] = useState("");
   const [editingCat, setEditingCat] = useState(null);
   const [reviewingTaskId, setReviewingTaskId] = useState(null);
+  const [selected, setSelected] = useState(new Set());
   const { starred, toggle: toggleStar } = useStarred();
   const { toasts, add: addToast } = useToast();
   const searchRef = useRef(null);
@@ -2914,7 +3017,13 @@ function App() {
       const aD = a.status === 'done' ? 1 : 0;
       const bD = b.status === 'done' ? 1 : 0;
       if (aD !== bD) return aD - bD;
-      const reviewOrder = (t) => { if (t.review_status === 'approved') return 0; if (t.review_status === 'submitted' || t.review_status === 'resubmitted') return 1; return 2; };
+      // Smart sorting: review_status takes priority
+      const reviewOrder = (t) => {
+        if (t.review_status === 'submitted' || t.review_status === 'resubmitted') return 0; // Top priority - needs review
+        if (t.review_status === 'approved') return 1; // Second priority - approved
+        if (t.review_status === 'needs_changes') return 2; // Third priority - needs changes
+        return 3; // Regular posts at bottom
+      };
       const aR = reviewOrder(a);
       const bR = reviewOrder(b);
       if (aR !== bR) return aR - bR;
@@ -2935,12 +3044,56 @@ function App() {
     done: tasks.filter(t => t.status === "done").length,
     inProgress: tasks.filter(t => t.status === "in_progress").length,
     waiting: tasks.filter(t => t.status === "waiting").length,
-    todo: tasks.filter(t => t.status === "todo").length
+    todo: tasks.filter(t => t.status === "todo").length,
+    inReview: tasks.filter(t => t.review_status && t.review_status !== 'none' && t.review_status !== 'approved').length
   };
 
   const toggleStatusFilter = (status) => {
     const mapped = { inProgress: "in_progress", waiting: "waiting", todo: "todo", done: "done" }[status];
     setStatusFilter(prev => prev === mapped ? "all" : mapped);
+  };
+
+  const toggleTaskSelection = (taskId) => {
+    setSelected(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(taskId)) newSet.delete(taskId);
+      else newSet.add(taskId);
+      return newSet;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selected.size === filtered.length && filtered.length > 0) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(filtered.map(t => t.id)));
+    }
+  };
+
+  const bulkSendForReview = async () => {
+    for (const taskId of selected) {
+      const task = tasks.find(t => t.id === taskId);
+      if (task) {
+        await updateTask({ ...task, review_status: 'submitted' });
+      }
+    }
+    setSelected(new Set());
+    addToast(`${selected.size} post(s) sent for review`);
+  };
+
+  const bulkMarkDone = async () => {
+    for (const taskId of selected) {
+      const task = tasks.find(t => t.id === taskId);
+      if (task) {
+        await updateTask({ ...task, status: 'done' });
+      }
+    }
+    setSelected(new Set());
+    addToast(`${selected.size} post(s) marked as done`);
+  };
+
+  const deselectAll = () => {
+    setSelected(new Set());
   };
 
   const reviewingTask = reviewingTaskId ? tasks.find(t => t.id === reviewingTaskId) : null;
@@ -2969,7 +3122,7 @@ function App() {
               <span className="stat-badge" onClick={() => toggleStatusFilter('waiting')}>{stats.waiting} waiting</span>
               <span className="stat-badge" onClick={() => toggleStatusFilter('todo')}>{stats.todo} to do</span>
               <span className="stat-badge" onClick={() => toggleStatusFilter('done')}>{stats.done} done</span>
-              <span className="stat-badge" onClick={() => setActiveCategory("In Review")}>{tasks.filter(t => t.review_status && t.review_status !== 'none' && t.review_status !== 'approved').length} in review</span>
+              <span className="stat-badge" style={{ background: '#DBEAFE', color: '#1d4ed8', borderColor: '#93c5fd' }} onClick={() => setActiveCategory("In Review")}>{stats.inReview} in review</span>
             </div>
             <button className="btn-secondary" onClick={() => setShowSuggest(true)}>{IC.plus} Suggest a Post</button>
             <button className="btn-primary" onClick={() => setShowNew(true)}>{IC.plus} New Post</button>
@@ -3027,15 +3180,27 @@ function App() {
 
         <main className="main">
           <div className="filters">
-            <div className="search-wrap">{IC.search}<input ref={searchRef} className="search-input" placeholder="Search posts..." value={search} onChange={(e) => setSearch(e.target.value)} /></div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1 }}>
+              <input type="checkbox" className="select-check" checked={selected.size === filtered.length && filtered.length > 0} onChange={toggleSelectAll} title="Select all visible posts" />
+              <div className="search-wrap">{IC.search}<input ref={searchRef} className="search-input" placeholder="Search posts..." value={search} onChange={(e) => setSearch(e.target.value)} /></div>
+            </div>
             <select className="filter-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}><option value="all">All Statuses</option>{STATUSES.map(s => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}</select>
             <select className="filter-select" value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)}><option value="all">All Priorities</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
             <select className="filter-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}><option value="priority">Sort: Priority</option><option value="status">Sort: Status</option><option value="title">Sort: Title</option><option value="deadline">Sort: Deadline</option></select>
             <span className="results-count">{filtered.length} of {tasks.length} posts</span>
           </div>
 
+          {selected.size > 0 && (
+            <div className="bulk-bar">
+              <span className="bulk-count">{selected.size} selected</span>
+              <button className="bulk-btn bulk-btn-review" onClick={bulkSendForReview}>Send for Review</button>
+              <button className="bulk-btn bulk-btn-done" onClick={bulkMarkDone}>Mark Done</button>
+              <button className="bulk-btn bulk-btn-deselect" onClick={deselectAll}>Deselect All</button>
+            </div>
+          )}
+
           {filtered.length === 0 ? (
-            <div className="empty-state">No posts found. Create one to get started.</div>
+            <div className="empty-state">📝 No posts found. Create one to get started.</div>
           ) : (
             filtered.map(task => (
               <TaskCard
@@ -3049,6 +3214,8 @@ function App() {
                 userEmail={user.email}
                 addToast={addToast}
                 onOpenReview={setReviewingTaskId}
+                isSelected={selected.has(task.id)}
+                onToggleSelect={() => toggleTaskSelection(task.id)}
               />
             ))
           )}
