@@ -1,0 +1,2938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abbey Consultants LinkedIn Content Manager</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2B9348;
+    --color-primary-dark: #1B7A35;
+    --color-primary-light: #E8F5E9;
+    --color-bg: #F3F4F6;
+    --color-border: #E5E7EB;
+    --color-text: #1F2937;
+    --color-text-light: #6B7280;
+    --color-text-lighter: #9CA3AF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.5;
+  }
+
+  .app { min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: white;
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .logo-text-light {
+    font-weight: 500;
+    color: var(--color-text-light);
+  }
+
+  .header-sub {
+    font-size: 12px;
+    color: var(--color-text-lighter);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .stat-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .stat-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(43, 147, 72, 0.1);
+    color: var(--color-primary);
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid rgba(43, 147, 72, 0.2);
+  }
+
+  .stat-badge:hover {
+    background: rgba(43, 147, 72, 0.15);
+  }
+
+  .sync-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: pulse 2s infinite;
+    display: inline-block;
+  }
+
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  /* ─── BUTTONS ─── */
+  .btn-primary {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .btn-primary:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(43, 147, 72, 0.3);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-primary-light);
+  }
+
+  .btn-sm {
+    background: white;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+
+  .btn-sm:hover {
+    background: white;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .btn-danger {
+    background: none;
+    border: none;
+    color: #dc2626;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-family: inherit;
+  }
+
+  .btn-danger:hover {
+    background: #fef2f2;
+  }
+
+  /* ─── LAYOUT ─── */
+  .layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
+    display: flex;
+  }
+
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--color-border);
+    padding: 20px 16px 24px 24px;
+    overflow-y: auto;
+    position: sticky;
+    top: 52px;
+    height: calc(100vh - 52px);
+  }
+
+  .sidebar-section {
+    margin-bottom: 24px;
+  }
+
+  .sidebar-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-lighter);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .sidebar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: all 0.15s;
+    gap: 6px;
+    margin-bottom: 4px;
+    font-family: inherit;
+  }
+
+  .sidebar-btn:hover {
+    background: rgba(43, 147, 72, 0.08);
+  }
+
+  .sidebar-btn.active {
+    background: rgba(43, 147, 72, 0.15);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .sidebar-count {
+    font-size: 12px;
+    color: var(--color-text-lighter);
+    flex-shrink: 0;
+    min-width: 20px;
+    text-align: right;
+  }
+
+  /* ─── MAIN ─── */
+  .main {
+    flex: 1;
+    padding: 20px 24px;
+    min-width: 0;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    max-width: 320px;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-lighter);
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 8px 12px 8px 32px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+    background: white;
+  }
+
+  .search-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(43, 147, 72, 0.1);
+  }
+
+  .filter-select {
+    padding: 8px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 12px;
+    outline: none;
+    font-family: inherit;
+    cursor: pointer;
+    background: white;
+  }
+
+  .filter-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(43, 147, 72, 0.1);
+  }
+
+  .results-count {
+    font-size: 12px;
+    color: var(--color-text-lighter);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* ─── TASK CARDS ─── */
+  .task-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    margin-bottom: 12px;
+    border-left: 4px solid transparent;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: subtleCardEnter 0.3s ease;
+  }
+
+  .task-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+
+  .task-card.done {
+    opacity: 0.5;
+  }
+
+  .task-card.p-high { border-left-color: #ef4444; }
+  .task-card.p-medium { border-left-color: #f59e0b; }
+  .task-card.p-low { border-left-color: var(--color-border); }
+  .task-card.starred { border-left-color: var(--color-primary); }
+
+  @keyframes subtleCardEnter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .task-header {
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .check-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--color-border);
+    background: white;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    transition: all 0.15s;
+  }
+
+  .check-btn:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+  }
+
+  .check-btn.checked {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .task-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .task-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .task-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .task-title.struck {
+    text-decoration: line-through;
+    color: var(--color-text-lighter);
+  }
+
+  .star-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    font-size: 16px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .star-btn:hover {
+    transform: scale(1.3);
+  }
+
+  .task-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .status-select {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: all 0.15s;
+    background: white;
+  }
+
+  .status-todo { background: #f3f4f6; color: #4b5563; border-color: #d1d5db; }
+  .status-in_progress { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
+  .status-waiting { background: #fef3c7; color: #b45309; border-color: #fcd34d; }
+  .status-done { background: #dcfce7; color: #15803d; border-color: #86efac; }
+
+  .task-category {
+    font-size: 11px;
+    color: var(--color-text-lighter);
+    background: rgba(43, 147, 72, 0.08);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .task-deadline {
+    font-size: 11px;
+    color: #ea580c;
+    font-weight: 500;
+  }
+
+  .task-preview {
+    font-size: 13px;
+    color: var(--color-text-light);
+    margin-top: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 600px;
+    font-style: italic;
+  }
+
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 5px;
+    background: #f3f4f6;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 999px;
+    transition: width 0.3s;
+  }
+
+  .progress-label {
+    font-size: 11px;
+    color: var(--color-text-lighter);
+  }
+
+  .expand-btn {
+    color: var(--color-text-lighter);
+    cursor: pointer;
+    padding: 4px;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    display: flex;
+    transition: all 0.2s;
+  }
+
+  .expand-btn:hover {
+    color: var(--color-text);
+  }
+
+  .task-card:hover .expand-btn {
+    color: var(--color-text-lighter);
+  }
+
+  /* ─── EXPANDED TASK ─── */
+  .task-expanded-wrap {
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+  }
+
+  .task-expanded-wrap.open {
+    max-height: 2000px;
+    opacity: 1;
+  }
+
+  .task-expanded-wrap.closed {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  .task-expanded {
+    padding: 0 16px 16px;
+    border-top: 1px solid #f3f4f6;
+  }
+
+  .field-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-lighter);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+
+  .field-desc {
+    font-size: 13px;
+    color: var(--color-text);
+    line-height: 1.6;
+  }
+
+  .field-textarea {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 60px;
+    transition: border-color 0.15s;
+  }
+
+  .field-textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(43, 147, 72, 0.1);
+  }
+
+  .field-input {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+
+  .field-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(43, 147, 72, 0.1);
+  }
+
+  .field-select {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+    cursor: pointer;
+    background: white;
+  }
+
+  .field-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .field-col {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  /* ─── CAPTIONS ─── */
+  .caption-section {
+    margin-top: 14px;
+  }
+
+  .caption-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-lighter);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .caption-textarea {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.15s;
+  }
+
+  .caption-textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(43, 147, 72, 0.1);
+  }
+
+  .caption-count {
+    font-size: 11px;
+    color: var(--color-text-lighter);
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* ─── SUBTASKS ─── */
+  .subtask-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    padding: 4px 0;
+  }
+
+  .subtask-item:hover .subtask-delete {
+    opacity: 1;
+  }
+
+  .subtask-check {
+    border-radius: 4px;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-primary);
+  }
+
+  .subtask-text {
+    flex: 1;
+    font-size: 13px;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    color: var(--color-text);
+    padding: 0;
+  }
+
+  .subtask-text.done {
+    text-decoration: line-through;
+    color: var(--color-text-lighter);
+  }
+
+  .subtask-delete {
+    opacity: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-lighter);
+    padding: 2px;
+    transition: opacity 0.15s;
+    display: flex;
+  }
+
+  .subtask-delete:hover {
+    color: #dc2626;
+  }
+
+  .add-subtask-btn {
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    font-family: inherit;
+    font-weight: 500;
+  }
+
+  /* ─── ASSETS ─── */
+  .assets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .asset-thumb {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: #f8fafc;
+    aspect-ratio: 1;
+    cursor: pointer;
+  }
+
+  .asset-thumb img, .asset-thumb video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .asset-thumb:hover .asset-overlay {
+    opacity: 1;
+  }
+
+  .asset-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .asset-overlay button {
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+
+  .asset-overlay button:hover {
+    background: white;
+  }
+
+  .asset-overlay .del-btn {
+    color: #dc2626;
+  }
+
+  .upload-zone {
+    border: 2px dashed var(--color-border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 8px;
+    background: white;
+  }
+
+  .upload-zone:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+  }
+
+  .upload-zone.dragging {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+    border-style: solid;
+  }
+
+  .upload-zone p {
+    font-size: 13px;
+    color: var(--color-text-light);
+  }
+
+  .upload-zone input {
+    display: none;
+  }
+
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .lightbox img, .lightbox video {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 8px;
+  }
+
+  /* ─── DOCUMENTS ─── */
+  .doc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .doc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #f9fafb;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+
+  .doc-item:hover {
+    border-color: var(--color-primary);
+    background: white;
+  }
+
+  .doc-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .doc-name {
+    flex: 1;
+    font-weight: 500;
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .doc-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .doc-actions a, .doc-actions button {
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--color-border);
+    background: white;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .doc-actions a:hover, .doc-actions button:hover {
+    background: #f9fafb;
+  }
+
+  .doc-actions button.del-btn {
+    color: #dc2626;
+    border-color: #fecaca;
+  }
+
+  .doc-actions button.del-btn:hover {
+    background: #fef2f2;
+  }
+
+  .doc-upload-zone {
+    border: 2px dashed var(--color-border);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--color-text-light);
+    transition: all 0.15s;
+    background: white;
+  }
+
+  .doc-upload-zone:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--color-primary-light);
+  }
+
+  .doc-upload-zone.dragging {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+    border-style: solid;
+  }
+
+  .doc-upload-zone input {
+    display: none;
+  }
+
+  /* ─── MODALS ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 16px;
+    animation: fadeIn 0.15s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal {
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    animation: slideUp 0.2s ease;
+  }
+
+  @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .modal h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 16px;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .modal-cancel {
+    background: none;
+    border: none;
+    color: var(--color-text);
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+    border-radius: 8px;
+  }
+
+  .modal-cancel:hover {
+    background: var(--color-bg);
+  }
+
+  .modal-confirm {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+
+  .modal-confirm:hover {
+    background: var(--color-primary-dark);
+  }
+
+  .modal-confirm:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .modal-field {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+    margin-bottom: 12px;
+    background: white;
+  }
+
+  .modal-field:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(43, 147, 72, 0.1);
+  }
+
+  /* ─── TOAST ─── */
+  .toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 70;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .toast {
+    background: var(--color-text);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: toastIn 0.3s ease;
+  }
+
+  .toast.leaving {
+    animation: toastOut 0.3s ease forwards;
+  }
+
+  @keyframes toastIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes toastOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(10px); opacity: 0; } }
+
+  /* ─── AUTH ─── */
+  .auth-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, white 100%);
+  }
+
+  .auth-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+
+  .auth-card h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--color-primary);
+  }
+
+  .auth-card p {
+    font-size: 13px;
+    color: var(--color-text-light);
+    margin-bottom: 24px;
+  }
+
+  .auth-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    font-family: inherit;
+    margin-bottom: 12px;
+    transition: border-color 0.15s;
+    background: white;
+  }
+
+  .auth-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(43, 147, 72, 0.1);
+  }
+
+  .auth-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    border: none;
+    background: var(--color-primary);
+    color: white;
+    transition: all 0.15s;
+    margin-bottom: 8px;
+  }
+
+  .auth-btn:hover {
+    background: var(--color-primary-dark);
+  }
+
+  .auth-btn:disabled {
+    opacity: 0.5;
+  }
+
+  .auth-error {
+    color: #dc2626;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  /* ─── REVIEW ─── */
+  .rm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(31, 41, 55, 0.6);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .rm-modal {
+    background: white;
+    border-radius: 16px;
+    width: 100%;
+    max-width: min(90vw, 1400px);
+    max-height: 88vh;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+  }
+
+  .rm-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--color-text);
+    z-index: 201;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .rm-close:hover {
+    background: var(--color-bg);
+    transform: scale(1.1);
+  }
+
+  .rm-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .rm-left {
+    flex: 0 0 65%;
+    background: #0f172a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .rm-left .single-media {
+    max-height: 600px;
+    width: 100%;
+  }
+
+  .rm-left .single-media img {
+    max-height: 600px;
+    max-width: 100%;
+  }
+
+  .single-media {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0f172a;
+    max-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .single-media img, .single-media video {
+    max-width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+  }
+
+  .rm-right {
+    flex: 0 0 35%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-left: 1px solid var(--color-border);
+    min-width: 0;
+  }
+
+  .rm-right-inner {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+  }
+
+  .rm-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .rm-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .rm-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .rm-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-lighter);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .rm-caption-text {
+    padding: 12px;
+    background: var(--color-bg);
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--color-text);
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .rm-caption-empty {
+    color: var(--color-text-lighter);
+    font-style: italic;
+  }
+
+  .rm-divider {
+    height: 1px;
+    background: var(--color-border);
+    margin: 0;
+  }
+
+  .btn-review {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .btn-review:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+
+  .btn-review:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-submit-review {
+    background: #3b82f6;
+    color: white;
+  }
+
+  .btn-submit-review:hover {
+    background: #2563eb;
+  }
+
+  .btn-approve {
+    background: #22c55e;
+    color: white;
+  }
+
+  .btn-approve:hover {
+    background: #16a34a;
+  }
+
+  .btn-request-changes {
+    background: #f59e0b;
+    color: white;
+  }
+
+  .btn-request-changes:hover {
+    background: #d97706;
+  }
+
+  .review-note-input {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 50px;
+    margin-bottom: 8px;
+  }
+
+  .review-note-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(43, 147, 72, 0.1);
+  }
+
+  .review-history {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .review-entry {
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    background: #f3f4f6;
+    border-left: 3px solid var(--color-border);
+  }
+
+  .review-entry-author {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--color-text);
+  }
+
+  .review-entry-date {
+    font-size: 11px;
+    color: var(--color-text-lighter);
+  }
+
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-bg);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--color-text);
+  }
+
+  .signout-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-lighter);
+    cursor: pointer;
+    font-size: 11px;
+    text-decoration: underline;
+    margin-left: 4px;
+    font-family: inherit;
+  }
+
+  .loading-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    color: var(--color-text-lighter);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px;
+    color: var(--color-text-lighter);
+    font-size: 13px;
+  }
+
+  @media (max-width: 768px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--color-border); padding: 12px; position: static; height: auto; }
+    .main { padding: 16px; }
+    .rm-body { flex-direction: column; }
+    .rm-left { flex: 0 0 auto; max-height: 50vh; padding: 16px; }
+    .rm-right { flex: 0 0 auto; border-left: none; border-top: 1px solid var(--color-border); }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+/* ╔════════════════════════════════════════════════════════════╗
+   ║  SUPABASE CONFIG                                          ║
+   ╚════════════════════════════════════════════════════════════╝ */
+const SUPABASE_URL = "https://custqtdksnziqozfgrsm.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_xJGnPXnFbCc6zdayoWGgVQ_tLBiGSqC";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ============================================================ */
+const PLATFORMS = ["LinkedIn"];
+const STATUSES = ["todo", "in_progress", "waiting", "done"];
+const STATUS_LABELS = { todo: "To Do", in_progress: "In Progress", waiting: "Waiting", done: "Done" };
+const DEFAULT_CATEGORIES = ["Thought Leadership", "Industry Updates", "Service Spotlight", "Project Showcase", "Case Studies", "Team & Culture", "Resources & Guides", "Compliance Updates"];
+const EMPTY_CAPTIONS = { "LinkedIn": "" };
+const REVIEW_STATUSES = { none: "none", submitted: "submitted", resubmitted: "resubmitted", needs_changes: "needs_changes", approved: "approved" };
+const REVIEW_LABELS = { none: "", submitted: "Review Needed", resubmitted: "Review Needed", needs_changes: "Needs Changes", approved: "Approved" };
+const MEDIA_TYPES = ["single", "carousel", "video"];
+
+/* ============================================================
+   ICONS
+   ============================================================ */
+const IC = {
+  chevronDown: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>,
+  chevronRight: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>,
+  plus: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
+  trash: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
+  search: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+  check: <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
+  edit: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+  image: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>,
+  x: <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
+};
+
+/* ============================================================
+   HOOKS
+   ============================================================ */
+function useStarred() {
+  const [starred, setStarred] = useState(() => {
+    try {
+      return new Set(JSON.parse(localStorage.getItem('abbey_starred') || '[]'));
+    } catch {
+      return new Set();
+    }
+  });
+  const toggle = useCallback((id) => {
+    setStarred(prev => {
+      const n = new Set(prev);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
+      localStorage.setItem('abbey_starred', JSON.stringify([...n]));
+      return n;
+    });
+  }, []);
+  return { starred, toggle };
+}
+
+function useToast() {
+  const [toasts, setToasts] = useState([]);
+  const add = useCallback((msg) => {
+    const id = Date.now();
+    setToasts(p => [...p, { id, msg }]);
+    setTimeout(() => setToasts(p => p.map(t => t.id === id ? { ...t, leaving: true } : t)), 2500);
+    setTimeout(() => setToasts(p => p.filter(t => t.id !== id)), 2800);
+  }, []);
+  return { toasts, add };
+}
+
+/* ============================================================
+   COMPONENTS
+   ============================================================ */
+function LinkedInCaptionEditor({ caption = "", onChange }) {
+  return (
+    <div className="caption-section">
+      <label className="caption-label">LinkedIn Caption</label>
+      <textarea
+        className="caption-textarea"
+        placeholder="Write your LinkedIn caption here..."
+        value={caption}
+        onChange={(e) => onChange(e.target.value)}
+        maxLength="3000"
+      />
+      <div className="caption-count">{caption.length} / 3000</div>
+    </div>
+  );
+}
+
+function SubtaskList({ subtasks = [], onChange, onAdd, onRemove }) {
+  return (
+    <div style={{ marginTop: 14 }}>
+      <span className="field-label">Subtasks</span>
+      {subtasks.map((s, i) => (
+        <div key={i} className="subtask-item">
+          <input
+            type="checkbox"
+            className="subtask-check"
+            checked={s.done || false}
+            onChange={(e) => {
+              const ns = [...subtasks];
+              ns[i] = { ...ns[i], done: e.target.checked };
+              onChange(ns);
+            }}
+          />
+          <input
+            type="text"
+            className={`subtask-text ${s.done ? 'done' : ''}`}
+            placeholder="Subtask..."
+            value={s.text || ""}
+            onChange={(e) => {
+              const ns = [...subtasks];
+              ns[i] = { ...ns[i], text: e.target.value };
+              onChange(ns);
+            }}
+          />
+          <button className="subtask-delete" onClick={() => onRemove(i)}>{IC.x}</button>
+        </div>
+      ))}
+      <button className="add-subtask-btn" onClick={onAdd}>{IC.plus} Add subtask</button>
+    </div>
+  );
+}
+
+function AssetUploader({ imageUrls = [], taskId, onUpdate, mediaType = 'single', onMediaTypeChange, addToast }) {
+  const fileRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [lightbox, setLightbox] = useState(null);
+  const [compressProgress, setCompressProgress] = useState("");
+
+  const compressVideo = async (file) => {
+    return new Promise((resolve) => {
+      const video = document.createElement('video');
+      video.src = URL.createObjectURL(file);
+      video.onloadedmetadata = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.min(video.videoWidth, 1280);
+        canvas.height = Math.min(video.videoHeight, 720);
+        const ctx = canvas.getContext('2d');
+        const recorder = new MediaRecorder(canvas.captureStream(30), { mimeType: 'video/webm' });
+        const chunks = [];
+        recorder.ondataavailable = (e) => chunks.push(e.data);
+        recorder.onstop = () => {
+          resolve(new Blob(chunks, { type: 'video/webm' }));
+        };
+        let frame = 0;
+        const renderFrame = () => {
+          if (video.currentTime < video.duration) {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            frame++;
+            const progress = Math.round((video.currentTime / video.duration) * 100);
+            setCompressProgress(`Compressing... ${progress}%`);
+            setTimeout(renderFrame, 33);
+          } else {
+            recorder.stop();
+            setCompressProgress("");
+            video.pause();
+          }
+        };
+        recorder.start();
+        video.play();
+        renderFrame();
+      };
+    });
+  };
+
+  const processFiles = async (files) => {
+    if (!files.length) return;
+    setUploading(true);
+    const newAssets = [...(imageUrls || [])];
+
+    for (const file of files) {
+      let uploadFile = file;
+      if (file.type.startsWith('video/') && file.size > 10 * 1024 * 1024) {
+        setCompressProgress("Compressing video...");
+        uploadFile = await compressVideo(file);
+      }
+
+      const path = `tasks/${taskId}/images/${Date.now()}_${file.name}`;
+      const { error } = await supabase.storage.from('assets').upload(path, uploadFile);
+      if (error) {
+        console.error(error);
+        continue;
+      }
+      const { data } = supabase.storage.from('assets').getPublicUrl(path);
+      newAssets.push({
+        url: data.publicUrl,
+        path,
+        name: file.name,
+        type: file.type.startsWith('video/') ? 'video' : 'image'
+      });
+
+      if (newAssets.length === 1) {
+        onMediaTypeChange('single');
+      } else if (newAssets.length > 1) {
+        onMediaTypeChange('carousel');
+      }
+    }
+    onUpdate(newAssets);
+    setUploading(false);
+  };
+
+  const handleFiles = async (e) => {
+    await processFiles(Array.from(e.target.files));
+    e.target.value = '';
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragging(false);
+    await processFiles(Array.from(e.dataTransfer.files));
+  };
+
+  const removeAsset = async (asset) => {
+    await supabase.storage.from('assets').remove([asset.path]);
+    const updated = imageUrls.filter(a => a.path !== asset.path);
+    onUpdate(updated);
+    if (updated.length === 1) onMediaTypeChange('single');
+    else if (updated.length === 0) onMediaTypeChange('single');
+  };
+
+  return (
+    <div style={{ marginTop: 14 }}>
+      <span className="field-label">Media & Images</span>
+      <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 8 }}>
+        <select
+          className="field-select"
+          style={{ flex: 1, minWidth: 100 }}
+          value={mediaType}
+          onChange={(e) => onMediaTypeChange(e.target.value)}
+        >
+          <option value="single">Single Image</option>
+          <option value="carousel">Carousel</option>
+          <option value="video">Video</option>
+        </select>
+      </div>
+      {imageUrls.length > 0 && (
+        <div className="assets-grid">
+          {imageUrls.map((a, i) => (
+            <div key={i} className="asset-thumb">
+              {a.type === 'video' ? (
+                <video src={a.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <img src={a.url} alt={a.name} onClick={() => setLightbox(a)} />
+              )}
+              <div className="asset-overlay">
+                <button onClick={() => setLightbox(a)}>View</button>
+                <button className="del-btn" onClick={() => removeAsset(a)}>Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {compressProgress && (
+        <div style={{
+          padding: '12px 16px',
+          background: '#fef3c7',
+          border: '1px solid #fcd34d',
+          borderRadius: 8,
+          marginTop: 8,
+          fontSize: 12,
+          fontWeight: 600,
+          color: '#92400e',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8
+        }}>
+          <span style={{
+            width: 14,
+            height: 14,
+            border: '2px solid #fcd34d',
+            borderTopColor: '#92400e',
+            borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite',
+            flexShrink: 0
+          }} />
+          {compressProgress}
+        </div>
+      )}
+      <div
+        className={`upload-zone ${dragging ? 'dragging' : ''}`}
+        onClick={() => fileRef.current?.click()}
+        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+        onDragLeave={(e) => { e.preventDefault(); setDragging(false); }}
+        onDrop={handleDrop}
+      >
+        <p>
+          {uploading ? "Uploading..." : (
+            <>
+              {IC.image} {dragging ? "Drop files here" : "Click or drag to upload"}
+            </>
+          )}
+        </p>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*,video/*"
+          multiple
+          onChange={handleFiles}
+          disabled={uploading || !!compressProgress}
+        />
+      </div>
+      {lightbox && (
+        <div className="lightbox" onClick={() => setLightbox(null)}>
+          {lightbox.type === 'video' ? (
+            <video src={lightbox.url} controls autoPlay style={{ maxWidth: '90vw', maxHeight: '80vh' }} onClick={(e) => e.stopPropagation()} />
+          ) : (
+            <img src={lightbox.url} alt={lightbox.name} onClick={(e) => e.stopPropagation()} />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DocUploader({ docs, taskId, onUpdate }) {
+  const fileRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+  const [dragging, setDragging] = useState(false);
+
+  const DOC_ACCEPT = '.pdf,.doc,.docx,.txt,.rtf,.odt,.xls,.xlsx,.ppt,.pptx';
+
+  const docIcon = (name) => {
+    const ext = (name || '').split('.').pop().toLowerCase();
+    if (ext === 'pdf') return '📄';
+    if (['doc', 'docx'].includes(ext)) return '📝';
+    if (['xls', 'xlsx'].includes(ext)) return '📊';
+    if (['ppt', 'pptx'].includes(ext)) return '📽️';
+    return '📁';
+  };
+
+  const processFiles = async (files) => {
+    if (!files.length) return;
+    setUploading(true);
+    const newDocs = [...(docs || [])];
+    for (const file of files) {
+      const path = `tasks/${taskId}/docs/${Date.now()}_${file.name}`;
+      const { error } = await supabase.storage.from('assets').upload(path, file);
+      if (error) {
+        console.error(error);
+        continue;
+      }
+      const { data } = supabase.storage.from('assets').getPublicUrl(path);
+      newDocs.push({ url: data.publicUrl, path, name: file.name, size: file.size });
+    }
+    onUpdate(newDocs);
+    setUploading(false);
+  };
+
+  const handleFiles = async (e) => {
+    await processFiles(Array.from(e.target.files));
+    e.target.value = '';
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragging(false);
+    await processFiles(Array.from(e.dataTransfer.files));
+  };
+
+  const removeDoc = async (doc) => {
+    await supabase.storage.from('assets').remove([doc.path]);
+    onUpdate((docs || []).filter(d => d.path !== doc.path));
+  };
+
+  const fmtSize = (bytes) => {
+    if (!bytes) return '';
+    if (bytes < 1024) return bytes + 'B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + 'KB';
+    return (bytes / 1048576).toFixed(1) + 'MB';
+  };
+
+  return (
+    <div style={{ marginTop: 14 }}>
+      <span className="field-label">Documents</span>
+      {(docs || []).length > 0 && (
+        <div className="doc-list">
+          {docs.map((d, i) => (
+            <div key={i} className="doc-item">
+              <span className="doc-icon">{docIcon(d.name)}</span>
+              <span className="doc-name" title={d.name}>{d.name}</span>
+              {d.size && <span style={{ fontSize: 10, color: '#6B7280', flexShrink: 0 }}>{fmtSize(d.size)}</span>}
+              <div className="doc-actions">
+                <a href={d.url} download>Download</a>
+                <button className="del-btn" onClick={() => removeDoc(d)}>Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      <div
+        className={`doc-upload-zone ${dragging ? 'dragging' : ''}`}
+        onClick={() => fileRef.current?.click()}
+        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+        onDragLeave={(e) => { e.preventDefault(); setDragging(false); }}
+        onDrop={handleDrop}
+      >
+        {uploading ? "Uploading..." : (dragging ? "Drop documents here" : "📁 Click or drag to upload documents")}
+        <input ref={fileRef} type="file" accept={DOC_ACCEPT} multiple onChange={handleFiles} disabled={uploading} />
+      </div>
+    </div>
+  );
+}
+
+function MediaViewer({ assets, mediaType, reviewMode = false }) {
+  const [idx, setIdx] = useState(0);
+  const items = assets || [];
+  if (items.length === 0) return null;
+  const safeIdx = Math.min(idx, items.length - 1);
+
+  if (mediaType === "video") {
+    return (
+      <div>
+        <div style={{ borderRadius: 12, overflow: 'hidden', background: '#0f172a' }}>
+          <video src={items[0]?.url} controls playsInline preload="metadata" style={{ width: '100%', maxHeight: 500 }}>
+            Your browser does not support video.
+          </video>
+        </div>
+      </div>
+    );
+  }
+
+  if (mediaType === "single" || items.length === 1) {
+    return (
+      <div className="single-media">
+        <img src={items[0]?.url} alt={items[0]?.name} />
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div style={{
+        position: 'relative',
+        background: '#0f172a',
+        borderRadius: 12,
+        overflow: 'hidden',
+        aspectRatio: '4/5',
+        maxHeight: 600,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <img src={items[safeIdx]?.url} alt={items[safeIdx]?.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+        {items.length > 1 && (
+          <>
+            <button
+              style={{
+                position: 'absolute',
+                left: 10,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.85)',
+                border: 'none',
+                width: 36,
+                height: 36,
+                borderRadius: '50%',
+                cursor: 'pointer',
+                fontSize: 18,
+                color: '#1f2937'
+              }}
+              onClick={() => setIdx((safeIdx - 1 + items.length) % items.length)}
+            >
+              ‹
+            </button>
+            <button
+              style={{
+                position: 'absolute',
+                right: 10,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.85)',
+                border: 'none',
+                width: 36,
+                height: 36,
+                borderRadius: '50%',
+                cursor: 'pointer',
+                fontSize: 18,
+                color: '#1f2937'
+              }}
+              onClick={() => setIdx((safeIdx + 1) % items.length)}
+            >
+              ›
+            </button>
+          </>
+        )}
+        <span style={{
+          position: 'absolute',
+          bottom: 10,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'rgba(0,0,0,0.6)',
+          color: 'white',
+          fontSize: 12,
+          fontWeight: 500,
+          padding: '3px 12px',
+          borderRadius: 999
+        }}>
+          {safeIdx + 1} / {items.length}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function ReviewModal({ task, onClose, onUpdate, userEmail, addToast }) {
+  const rs = task.review_status || "none";
+  const notes = task.review_notes || [];
+  const [msg, setMsg] = useState("");
+  const [showChangesForm, setShowChangesForm] = useState(false);
+  const [imgComments, setImgComments] = useState({});
+
+  useEffect(() => {
+    const h = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', h);
+    return () => document.removeEventListener('keydown', h);
+  }, [onClose]);
+
+  const addReviewNote = (type, message, image_comments) => {
+    const entry = { author: userEmail, date: new Date().toISOString(), type, message };
+    if (image_comments && Object.keys(image_comments).length > 0) entry.image_comments = image_comments;
+    return [...notes, entry];
+  };
+
+  const submitForReview = () => {
+    onUpdate({ ...task, review_status: "submitted", review_notes: addReviewNote("submit", msg || "Ready for review") });
+    setMsg("");
+    addToast("Submitted for review");
+  };
+
+  const resubmit = () => {
+    onUpdate({ ...task, review_status: "resubmitted", review_notes: addReviewNote("resubmit", msg || "Updated and resubmitted") });
+    setMsg("");
+    addToast("Resubmitted for review");
+  };
+
+  const approve = () => {
+    onUpdate({ ...task, review_status: "approved", review_notes: addReviewNote("approve", msg || "Approved!") });
+    setMsg("");
+    addToast("Post approved!");
+  };
+
+  const requestChanges = () => {
+    onUpdate({ ...task, review_status: "needs_changes", review_notes: addReviewNote("changes", msg, imgComments) });
+    setMsg("");
+    setImgComments({});
+    setShowChangesForm(false);
+    addToast("Changes requested");
+  };
+
+  const undoReview = () => {
+    if (!confirm("Return this task to editing? Review status will be reset.")) return;
+    onUpdate({ ...task, review_status: "none", review_notes: addReviewNote("undo", "Returned to editing") });
+    addToast("Returned to editing");
+  };
+
+  const isReviewable = rs === "submitted" || rs === "resubmitted";
+  const canSubmit = rs === "none";
+  const canResubmit = rs === "needs_changes";
+  const formatDate = (d) => {
+    try {
+      return new Date(d).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return d;
+    }
+  };
+  const typeLabels = { submit: "Submitted", resubmit: "Resubmitted", changes: "Changes Requested", approve: "Approved" };
+  const caps = task.captions || {};
+
+  return (
+    <div className="rm-overlay" onClick={onClose}>
+      <div className="rm-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="rm-close" onClick={onClose}>×</button>
+        <div className="rm-body">
+          <div className="rm-left">
+            {(task.image_urls || []).length > 0 ? (
+              <MediaViewer assets={task.image_urls} mediaType={task.media_type || "single"} reviewMode={showChangesForm} />
+            ) : (
+              <div style={{ color: '#64748b', fontSize: 14, textAlign: 'center', padding: 40 }}>
+                No media uploaded yet.<br />Upload images or video from the task card.
+              </div>
+            )}
+          </div>
+          <div className="rm-right">
+            <div className="rm-right-inner">
+              <div className="rm-header">
+                <h2 className="rm-title">{task.title}</h2>
+                <div className="rm-meta">
+                  <span className="task-category">{task.category}</span>
+                  {rs !== "none" && <span style={{ fontSize: 10, fontWeight: 600, color: '#6B7280', textTransform: 'uppercase' }}>{REVIEW_LABELS[rs]}</span>}
+                </div>
+              </div>
+
+              {task.description && (
+                <div className="rm-section">
+                  <div className="rm-section-title">Description</div>
+                  <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.6, margin: 0 }}>{task.description}</p>
+                </div>
+              )}
+
+              <div className="rm-divider" />
+
+              <div className="rm-section">
+                <div className="rm-section-title">LinkedIn Caption</div>
+                <div className="rm-caption-text">
+                  {caps["LinkedIn"] ? caps["LinkedIn"] : <span className="rm-caption-empty">No caption yet.</span>}
+                </div>
+              </div>
+
+              <div className="rm-divider" />
+
+              <div className="rm-section">
+                <div className="rm-section-title">Review</div>
+
+                {canSubmit && (
+                  <div>
+                    <textarea className="review-note-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Optional message for reviewer..." rows={2} />
+                    <button className="btn-review btn-submit-review" onClick={submitForReview}>Submit for Review</button>
+                  </div>
+                )}
+
+                {canResubmit && (
+                  <div>
+                    <textarea className="review-note-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="What did you change?" rows={2} />
+                    <button className="btn-review btn-submit-review" onClick={resubmit}>Resubmit for Review</button>
+                  </div>
+                )}
+
+                {isReviewable && (
+                  <div>
+                    {!showChangesForm ? (
+                      <div style={{ display: 'flex', gap: 8, flexDirection: 'column' }}>
+                        <button className="btn-review btn-approve" onClick={approve}>Approve</button>
+                        <button className="btn-review btn-request-changes" onClick={() => setShowChangesForm(true)}>Request Changes</button>
+                        <button className="btn-sm" onClick={undoReview} style={{ color: '#6B7280', fontSize: 11 }}>Undo — return to editing</button>
+                      </div>
+                    ) : (
+                      <div style={{ width: '100%' }}>
+                        <p style={{ fontSize: 12, fontWeight: 600, color: '#4b5563', marginBottom: 6 }}>Describe what needs changing.</p>
+                        <textarea className="review-note-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="What needs to change?" rows={3} />
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button className="btn-review btn-request-changes" onClick={requestChanges} disabled={!msg.trim()}>Send Feedback</button>
+                          <button className="btn-sm" onClick={() => { setShowChangesForm(false); setImgComments({}); }}>Cancel</button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {rs === "approved" && (
+                  <div>
+                    <p style={{ fontSize: 13, color: '#15803d', fontWeight: 500, margin: 0 }}>This post has been approved and is ready to go live.</p>
+                    <button className="btn-sm" onClick={undoReview} style={{ color: '#6B7280', fontSize: 11, marginTop: 4 }}>Undo approval — return to editing</button>
+                  </div>
+                )}
+              </div>
+
+              {notes.length > 0 && (
+                <>
+                  <div className="rm-divider" />
+                  <div className="rm-section">
+                    <div className="rm-section-title">Review History</div>
+                    <div className="review-history">
+                      {[...notes].reverse().map((n, i) => (
+                        <div key={i} className="review-entry">
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                            <span className="review-entry-author">{n.author}</span>
+                            <span className="review-entry-date">{formatDate(n.date)}</span>
+                          </div>
+                          {n.message && <p style={{ fontSize: 12, color: '#4b5563', margin: 0 }}>{n.message}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleStar, forceExpand, userEmail, addToast, onOpenReview }) {
+  const [expanded, setExpanded] = useState(false);
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [titleDraft, setTitleDraft] = useState(task.title);
+  const titleRef = useRef(null);
+
+  useEffect(() => {
+    if (editingTitle && titleRef.current) titleRef.current.focus();
+  }, [editingTitle]);
+
+  useEffect(() => {
+    if (forceExpand !== undefined) setExpanded(forceExpand);
+  }, [forceExpand]);
+
+  const done = task.subtasks?.filter(s => s.done).length || 0;
+  const total = task.subtasks?.length || 0;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  const saveTitle = () => {
+    if (titleDraft.trim()) onUpdate({ ...task, title: titleDraft.trim() });
+    else setTitleDraft(task.title);
+    setEditingTitle(false);
+  };
+
+  const handleHeaderClick = (e) => {
+    const target = e.target;
+    if (target.closest('button') || target.closest('select') || target.closest('input')) return;
+    setExpanded(!expanded);
+  };
+
+  const cardClass = `task-card ${task.status === 'done' ? 'done' : ''} p-${task.priority} ${isStarred ? 'starred' : ''}`;
+
+  return (
+    <div className={cardClass}>
+      <div className="task-header" onClick={handleHeaderClick}>
+        <button
+          className={`check-btn ${task.status === 'done' ? 'checked' : ''}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onUpdate({ ...task, status: task.status === 'done' ? 'todo' : 'done' });
+          }}
+        >
+          {task.status === 'done' && IC.check}
+        </button>
+        <div className="task-content">
+          <div className="task-title-row">
+            <button
+              className="star-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleStar(task.id);
+              }}
+              title="Star this task"
+            >
+              {isStarred ? "★" : "☆"}
+            </button>
+            {editingTitle ? (
+              <input
+                ref={titleRef}
+                style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: '#1f2937',
+                  border: '1px solid #2B9348',
+                  borderRadius: 6,
+                  padding: '2px 6px',
+                  outline: 'none',
+                  fontFamily: 'inherit',
+                  width: '100%',
+                  boxShadow: '0 0 0 3px rgba(43, 147, 72, 0.1)'
+                }}
+                value={titleDraft}
+                onChange={(e) => setTitleDraft(e.target.value)}
+                onBlur={saveTitle}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') saveTitle();
+                  if (e.key === 'Escape') {
+                    setTitleDraft(task.title);
+                    setEditingTitle(false);
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+            ) : (
+              <>
+                <span className={`task-title ${task.status === 'done' ? 'struck' : ''}`}>{task.title}</span>
+                <button
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: '#9CA3AF',
+                    padding: 2,
+                    display: 'flex',
+                    transition: 'color 0.15s'
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setTitleDraft(task.title);
+                    setEditingTitle(true);
+                  }}
+                >
+                  {IC.edit}
+                </button>
+              </>
+            )}
+          </div>
+          <div className="task-meta">
+            <select
+              className={`status-select status-${task.status}`}
+              value={task.status}
+              onChange={(e) => {
+                e.stopPropagation();
+                onUpdate({ ...task, status: e.target.value });
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {STATUSES.map(s => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
+            </select>
+            <span className="task-category">{task.category}</span>
+            {task.deadline && <span className="task-deadline">📅 {task.deadline}</span>}
+            {(task.image_urls || []).length > 0 && <span style={{ fontSize: 11, color: '#6B7280' }}>🖼️ {task.image_urls.length}</span>}
+            {task.review_status && task.review_status !== 'none' && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenReview && onOpenReview(task.id);
+                }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 5,
+                  padding: '3px 10px',
+                  borderRadius: 999,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  border: 'none',
+                  background: '#dbeafe',
+                  color: '#1d4ed8',
+                  transition: 'all 0.15s',
+                  fontFamily: 'inherit'
+                }}
+              >
+                Open Review →
+              </button>
+            )}
+          </div>
+          {!expanded && task.description && <p className="task-preview">{task.description}</p>}
+          {total > 0 && (
+            <div className="progress-bar">
+              <div className="progress-track">
+                <div className="progress-fill" style={{ width: pct + '%' }} />
+              </div>
+              <span className="progress-label">{done}/{total}</span>
+            </div>
+          )}
+        </div>
+        <button
+          className="expand-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded(!expanded);
+          }}
+          title={expanded ? "Collapse" : "Expand"}
+        >
+          {expanded ? IC.chevronDown : IC.chevronRight}
+        </button>
+      </div>
+      <div className={`task-expanded-wrap ${expanded ? 'open' : 'closed'}`}>
+        {expanded && (
+          <div className="task-expanded">
+            <span className="field-label">Description</span>
+            <p className="field-desc">{task.description || <span style={{ color: '#cbd5e1', fontStyle: 'italic' }}>No description yet.</span>}</p>
+
+            <span className="field-label">Notes</span>
+            <textarea
+              className="field-textarea"
+              placeholder="Notes..."
+              defaultValue={task.notes}
+              onBlur={(e) => onUpdate({ ...task, notes: e.target.value })}
+              rows={2}
+            />
+
+            <div className="field-row">
+              <div className="field-col">
+                <span className="field-label">Priority</span>
+                <select
+                  className="field-select"
+                  value={task.priority}
+                  onChange={(e) => onUpdate({ ...task, priority: e.target.value })}
+                >
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <div className="field-col">
+                <span className="field-label">Deadline</span>
+                <input
+                  className="field-input"
+                  type="text"
+                  placeholder="e.g. March 1st"
+                  defaultValue={task.deadline}
+                  onBlur={(e) => onUpdate({ ...task, deadline: e.target.value })}
+                />
+              </div>
+              <div className="field-col">
+                <span className="field-label">Category</span>
+                <select
+                  className="field-select"
+                  value={task.category}
+                  onChange={(e) => onUpdate({ ...task, category: e.target.value })}
+                >
+                  {categories.map(c => <option key={c}>{c}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <SubtaskList
+              subtasks={task.subtasks || []}
+              onChange={(subtasks) => onUpdate({ ...task, subtasks })}
+              onAdd={() => onUpdate({ ...task, subtasks: [...(task.subtasks || []), { text: "", done: false }] })}
+              onRemove={(i) => onUpdate({ ...task, subtasks: (task.subtasks || []).filter((_, idx) => idx !== i) })}
+            />
+
+            <LinkedInCaptionEditor
+              caption={task.captions?.["LinkedIn"] || ""}
+              onChange={(caption) => onUpdate({ ...task, captions: { ...task.captions, "LinkedIn": caption } })}
+            />
+
+            <DocUploader
+              docs={task.doc_urls || []}
+              taskId={task.id}
+              onUpdate={(urls) => onUpdate({ ...task, doc_urls: urls })}
+            />
+
+            <AssetUploader
+              imageUrls={task.image_urls || []}
+              taskId={task.id}
+              onUpdate={(urls) => onUpdate({ ...task, image_urls: urls })}
+              mediaType={task.media_type || 'single'}
+              onMediaTypeChange={(mt) => onUpdate({ ...task, media_type: mt })}
+              addToast={addToast}
+            />
+
+            <div style={{ paddingTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+              <button
+                className="btn-secondary"
+                onClick={() => onOpenReview && onOpenReview(task.id)}
+              >
+                Open Review
+              </button>
+              <button className="btn-danger" onClick={() => { if (confirm("Delete this task?")) onDelete(task.id); }}>
+                {IC.trash} Delete task
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function NewTaskModal({ onAdd, onClose, categories }) {
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState(categories[0] || "");
+  const [priority, setPriority] = useState("medium");
+  const ref = useRef(null);
+
+  useEffect(() => { ref.current?.focus(); }, []);
+
+  useEffect(() => {
+    const h = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [onClose]);
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <h2>New Post</h2>
+        <input
+          ref={ref}
+          className="modal-field"
+          placeholder="Post title..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter' && title.trim()) onAdd({ title: title.trim(), category, priority }); }}
+        />
+        <select className="modal-field" value={category} onChange={(e) => setCategory(e.target.value)}>
+          {categories.map(c => <option key={c}>{c}</option>)}
+        </select>
+        <select className="modal-field" value={priority} onChange={(e) => setPriority(e.target.value)}>
+          <option value="high">High Priority</option>
+          <option value="medium">Medium Priority</option>
+          <option value="low">Low Priority</option>
+        </select>
+        <div className="modal-actions">
+          <button className="modal-cancel" onClick={onClose}>Cancel</button>
+          <button className="modal-confirm" disabled={!title.trim()} onClick={() => { if (title.trim()) onAdd({ title: title.trim(), category, priority }); }}>
+            Create Post
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SuggestPostModal({ onAdd, onClose, categories }) {
+  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
+  const [notes, setNotes] = useState("");
+  const [category, setCategory] = useState(categories[0] || "");
+  const ref = useRef(null);
+
+  useEffect(() => { ref.current?.focus(); }, []);
+  useEffect(() => {
+    const h = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [onClose]);
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <h2>Suggest a Post</h2>
+        <input
+          ref={ref}
+          className="modal-field"
+          placeholder="Post idea..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          className="modal-field"
+          placeholder="URL or resource (optional)"
+          type="url"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
+        <textarea
+          className="modal-field"
+          style={{ minHeight: 80, fontFamily: 'inherit' }}
+          placeholder="Why this would be a great post (optional)"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+        <select className="modal-field" value={category} onChange={(e) => setCategory(e.target.value)}>
+          {categories.map(c => <option key={c}>{c}</option>)}
+        </select>
+        <div className="modal-actions">
+          <button className="modal-cancel" onClick={onClose}>Cancel</button>
+          <button
+            className="modal-confirm"
+            disabled={!title.trim()}
+            onClick={() => {
+              if (title.trim()) onAdd({ title: title.trim(), category, url, notes });
+            }}
+          >
+            Submit Suggestion
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ToastContainer({ toasts }) {
+  return (
+    <div className="toast-container">
+      {toasts.map(t => <div key={t.id} className={`toast ${t.leaving ? 'leaving' : ''}`}>{t.msg}</div>)}
+    </div>
+  );
+}
+
+function AuthScreen() {
+  const [mode, setMode] = useState("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleEmail = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    if (mode === "signup") {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        setError(error.message);
+      } else {
+        setSuccess("Check your email for a verification link. Click the link, then come back here and sign in.");
+      }
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) setError(error.message);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="auth-screen">
+      <div className="auth-card">
+        <h1>ABBEY CONSULTANTS</h1>
+        <p>LinkedIn Content Manager</p>
+
+        <div style={{ display: 'flex', gap: 0, marginBottom: 20, borderRadius: 10, overflow: 'hidden', border: '1px solid #E5E7EB' }}>
+          <button
+            onClick={() => { setMode("login"); setError(""); setSuccess(""); }}
+            style={{
+              flex: 1,
+              padding: '10px 0',
+              fontSize: 14,
+              fontWeight: mode === 'login' ? 700 : 400,
+              border: 'none',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              background: mode === 'login' ? '#2B9348' : '#F3F4F6',
+              color: mode === 'login' ? 'white' : '#6B7280',
+              transition: 'all 0.15s'
+            }}
+          >
+            Sign In
+          </button>
+          <button
+            onClick={() => { setMode("signup"); setError(""); setSuccess(""); }}
+            style={{
+              flex: 1,
+              padding: '10px 0',
+              fontSize: 14,
+              fontWeight: mode === 'signup' ? 700 : 400,
+              borderLeft: '1px solid #E5E7EB',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              background: mode === 'signup' ? '#2B9348' : '#F3F4F6',
+              color: mode === 'signup' ? 'white' : '#6B7280',
+              transition: 'all 0.15s'
+            }}
+          >
+            Create Account
+          </button>
+        </div>
+
+        {mode === "signup" && (
+          <div style={{ background: '#E8F5E9', border: '1px solid #C8E6C9', borderRadius: 10, padding: '12px 14px', marginBottom: 16, textAlign: 'left' }}>
+            <p style={{ fontSize: 12, fontWeight: 600, color: '#1B7A35', margin: '0 0 4px' }}>How sign-up works:</p>
+            <p style={{ fontSize: 12, color: '#1B7A35', margin: '0 0 2px' }}>1. Enter your email and choose a password</p>
+            <p style={{ fontSize: 12, color: '#1B7A35', margin: '0 0 2px' }}>2. You'll receive a verification email — click the link in it</p>
+            <p style={{ fontSize: 12, color: '#1B7A35', margin: 0 }}>3. Come back here and sign in with your email and password</p>
+          </div>
+        )}
+
+        {error && <p className="auth-error">{error}</p>}
+        {success && (
+          <div style={{ background: '#E8F5E9', border: '1px solid #C8E6C9', borderRadius: 10, padding: '12px 14px', marginBottom: 12, textAlign: 'left' }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#1B7A35', margin: '0 0 4px' }}>Account created!</p>
+            <p style={{ fontSize: 12, color: '#2B5A3B', margin: 0 }}>{success}</p>
+          </div>
+        )}
+
+        {!success && (
+          <form onSubmit={handleEmail}>
+            <input className="auth-input" type="email" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input className="auth-input" type="password" placeholder={mode === "signup" ? "Choose a password (min 6 chars)" : "Password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+            <button className="auth-btn" type="submit" disabled={loading}>
+              {loading ? "..." : (mode === "signup" ? "Create Account" : "Sign In")}
+            </button>
+          </form>
+        )}
+
+        {success && (
+          <button className="auth-btn" onClick={() => { setMode("login"); setSuccess(""); }} style={{ marginTop: 8 }}>
+            Go to Sign In
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   MAIN APP
+   ============================================================ */
+function App() {
+  const [user, setUser] = useState(undefined);
+  const [tasks, setTasks] = useState([]);
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
+  const [showNew, setShowNew] = useState(false);
+  const [showSuggest, setShowSuggest] = useState(false);
+  const [sortBy, setSortBy] = useState("priority");
+  const [synced, setSynced] = useState(false);
+  const [newCatName, setNewCatName] = useState("");
+  const [reviewingTaskId, setReviewingTaskId] = useState(null);
+  const { starred, toggle: toggleStar } = useStarred();
+  const { toasts, add: addToast } = useToast();
+  const searchRef = useRef(null);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const h = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+      if (e.key === 'n' && !e.metaKey && !e.ctrlKey) { e.preventDefault(); setShowNew(true); }
+      if (e.key === '/' && !e.metaKey && !e.ctrlKey) { e.preventDefault(); searchRef.current?.focus(); }
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, []);
+
+  // Auth
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user || null));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => setUser(session?.user || null));
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Load tasks + real-time
+  useEffect(() => {
+    if (!user) return;
+    const loadTasks = async () => {
+      const { data, error } = await supabase.from('tasks').select('*').order('created_at', { ascending: true });
+      if (!error && data) {
+        setTasks(data);
+        setSynced(true);
+      }
+    };
+    loadTasks();
+    const channel = supabase.channel('tasks-changes').on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, (payload) => {
+      if (payload.eventType === 'INSERT') setTasks(prev => [...prev.filter(t => t.id !== payload.new.id), payload.new]);
+      if (payload.eventType === 'UPDATE') setTasks(prev => prev.map(t => t.id === payload.new.id ? payload.new : t));
+      if (payload.eventType === 'DELETE') setTasks(prev => prev.filter(t => t.id !== payload.old.id));
+    }).subscribe();
+    supabase.from('meta').select('*').eq('key', 'categories').single().then(({ data }) => { if (data?.value) setCategories(data.value); });
+    const catChannel = supabase.channel('meta-changes').on('postgres_changes', { event: '*', schema: 'public', table: 'meta', filter: 'key=eq.categories' }, (payload) => {
+      if (payload.new?.value) setCategories(payload.new.value);
+    }).subscribe();
+    return () => { supabase.removeChannel(channel); supabase.removeChannel(catChannel); };
+  }, [user]);
+
+  const updateTask = async (updated) => {
+    const { id, ...data } = updated;
+    setTasks(prev => prev.map(t => t.id === id ? updated : t));
+    await supabase.from('tasks').update(data).eq('id', id);
+  };
+
+  const deleteTask = async (id) => {
+    const task = tasks.find(t => t.id === id);
+    if (task?.image_urls) { for (const img of task.image_urls) { await supabase.storage.from('assets').remove([img.path]); } }
+    if (task?.doc_urls) { for (const doc of task.doc_urls) { await supabase.storage.from('assets').remove([doc.path]); } }
+    setTasks(prev => prev.filter(t => t.id !== id));
+    await supabase.from('tasks').delete().eq('id', id);
+    addToast("Post deleted");
+  };
+
+  const addTask = async ({ title, category, priority }) => {
+    await supabase.from('tasks').insert({
+      title,
+      category,
+      status: 'todo',
+      priority,
+      deadline: '',
+      description: '',
+      notes: '',
+      captions: { ...EMPTY_CAPTIONS },
+      subtasks: [],
+      image_urls: [],
+      doc_urls: [],
+      review_status: 'none',
+      review_notes: [],
+      media_type: 'single',
+      user_id: user.id
+    });
+    setShowNew(false);
+    addToast(`"${title}" added`);
+  };
+
+  const suggestPost = async ({ title, category, url, notes }) => {
+    const note = url ? `💡 Suggested by ${user.email}\nResource: ${url}${notes ? '\nContext: ' + notes : ''}` : `💡 Suggested by ${user.email}${notes ? '\nContext: ' + notes : ''}`;
+    await supabase.from('tasks').insert({
+      title,
+      category,
+      status: 'todo',
+      priority: 'low',
+      deadline: '',
+      description: '',
+      notes: note,
+      captions: { ...EMPTY_CAPTIONS },
+      subtasks: [],
+      image_urls: [],
+      doc_urls: [],
+      review_status: 'none',
+      review_notes: [],
+      media_type: 'single',
+      user_id: user.id
+    });
+    setShowSuggest(false);
+    addToast(`Suggestion added`);
+  };
+
+  const saveCategories = async (cats) => { setCategories(cats); await supabase.from('meta').upsert({ key: 'categories', value: cats }); };
+  const addCategory = () => { const n = newCatName.trim(); if (!n || categories.includes(n)) return; saveCategories([...categories, n]); setNewCatName(""); addToast(`Category "${n}" added`); };
+  const renameCategory = async (oldName, newName) => {
+    if (categories.includes(newName)) { alert(`"${newName}" exists.`); return; }
+    const newCats = categories.map(c => c === oldName ? newName : c);
+    const toUpdate = tasks.filter(t => t.category === oldName);
+    for (const t of toUpdate) { await supabase.from('tasks').update({ category: newName }).eq('id', t.id); }
+    await saveCategories(newCats);
+    if (activeCategory === oldName) setActiveCategory(newName);
+  };
+  const deleteCategory = async (cat) => {
+    const target = categories.find(c => c !== cat) || "Uncategorized";
+    if (!confirm(`Delete "${cat}"? Posts move to "${target}".`)) return;
+    const toUpdate = tasks.filter(t => t.category === cat);
+    for (const t of toUpdate) { await supabase.from('tasks').update({ category: target }).eq('id', t.id); }
+    await saveCategories(categories.filter(c => c !== cat));
+    if (activeCategory === cat) setActiveCategory("All");
+  };
+
+  const signOut = () => supabase.auth.signOut();
+
+  if (user === undefined) return <div className="loading-screen">Loading...</div>;
+  if (user === null) return <AuthScreen />;
+
+  // Filter + sort
+  const filtered = tasks
+    .filter(t => activeCategory === "All" || (activeCategory === "Starred" ? starred.has(t.id) : activeCategory === "In Review" ? (t.review_status && t.review_status !== 'none' && t.review_status !== 'approved') : t.category === activeCategory))
+    .filter(t => statusFilter === "all" || t.status === statusFilter)
+    .filter(t => priorityFilter === "all" || t.priority === priorityFilter)
+    .filter(t => {
+      if (!search) return true;
+      const q = search.toLowerCase();
+      return t.title?.toLowerCase().includes(q) || t.description?.toLowerCase().includes(q) || t.notes?.toLowerCase().includes(q);
+    })
+    .sort((a, b) => {
+      const aS = starred.has(a.id) ? 0 : 1;
+      const bS = starred.has(b.id) ? 0 : 1;
+      if (aS !== bS) return aS - bS;
+      const aD = a.status === 'done' ? 1 : 0;
+      const bD = b.status === 'done' ? 1 : 0;
+      if (aD !== bD) return aD - bD;
+      const reviewOrder = (t) => { if (t.review_status === 'approved') return 0; if (t.review_status === 'submitted' || t.review_status === 'resubmitted') return 1; return 2; };
+      const aR = reviewOrder(a);
+      const bR = reviewOrder(b);
+      if (aR !== bR) return aR - bR;
+      if (sortBy === "priority") {
+        const o = { high: 0, medium: 1, low: 2 };
+        const ap = o[a.priority] ?? 1;
+        const bp = o[b.priority] ?? 1;
+        if (ap !== bp) return ap - bp;
+        const so = { in_progress: 0, todo: 1, waiting: 2 };
+        return (so[a.status] ?? 1) - (so[b.status] ?? 1);
+      }
+      if (sortBy === "status") { const o = { in_progress: 0, todo: 1, waiting: 2, done: 3 }; return (o[a.status] || 1) - (o[b.status] || 1); }
+      if (sortBy === "deadline") { const aD = a.deadline || "zzz"; const bD = b.deadline || "zzz"; return aD.localeCompare(bD); }
+      return (a.title || "").localeCompare(b.title || "");
+    });
+
+  const stats = {
+    done: tasks.filter(t => t.status === "done").length,
+    inProgress: tasks.filter(t => t.status === "in_progress").length,
+    waiting: tasks.filter(t => t.status === "waiting").length,
+    todo: tasks.filter(t => t.status === "todo").length
+  };
+
+  const toggleStatusFilter = (status) => {
+    const mapped = { inProgress: "in_progress", waiting: "waiting", todo: "todo", done: "done" }[status];
+    setStatusFilter(prev => prev === mapped ? "all" : mapped);
+  };
+
+  const reviewingTask = reviewingTaskId ? tasks.find(t => t.id === reviewingTaskId) : null;
+
+  return (
+    <div className="app">
+      <header className="header">
+        <div className="header-inner">
+          <div className="logo">
+            <div>
+              <div className="logo-text">ABBEY <span className="logo-text-light">CONSULTANTS</span></div>
+              <div className="header-sub"><span className={`sync-dot`} style={{ background: synced ? '#22c55e' : '#ef4444' }} />{synced ? "Live — syncing" : "Connecting..."}</div>
+            </div>
+          </div>
+          <div className="header-right">
+            <div className="stat-badges">
+              <span className="stat-badge" onClick={() => toggleStatusFilter('inProgress')}>{stats.inProgress} active</span>
+              <span className="stat-badge" onClick={() => toggleStatusFilter('waiting')}>{stats.waiting} waiting</span>
+              <span className="stat-badge" onClick={() => toggleStatusFilter('todo')}>{stats.todo} to do</span>
+              <span className="stat-badge" onClick={() => toggleStatusFilter('done')}>{stats.done} done</span>
+              <span className="stat-badge" onClick={() => setActiveCategory("In Review")}>{tasks.filter(t => t.review_status && t.review_status !== 'none' && t.review_status !== 'approved').length} in review</span>
+            </div>
+            <button className="btn-secondary" onClick={() => setShowSuggest(true)}>{IC.plus} Suggest a Post</button>
+            <button className="btn-primary" onClick={() => setShowNew(true)}>{IC.plus} New Post</button>
+            <div className="user-pill"><span>{user.email || "User"}</span><button className="signout-btn" onClick={signOut}>Sign out</button></div>
+          </div>
+        </div>
+      </header>
+
+      <div className="layout">
+        <aside className="sidebar">
+          <div className="sidebar-section">
+            <div className="sidebar-label">Views</div>
+            <button className={`sidebar-btn ${activeCategory === "All" ? 'active' : ''}`} onClick={() => setActiveCategory("All")}><span>All Posts</span><span className="sidebar-count">{tasks.length}</span></button>
+            <button className={`sidebar-btn ${activeCategory === "Starred" ? 'active' : ''}`} onClick={() => setActiveCategory("Starred")}><span>★ Starred</span><span className="sidebar-count">{starred.size}</span></button>
+            <button className={`sidebar-btn ${activeCategory === "In Review" ? 'active' : ''}`} onClick={() => setActiveCategory("In Review")}><span>🔍 In Review</span><span className="sidebar-count">{tasks.filter(t => t.review_status && t.review_status !== 'none' && t.review_status !== 'approved').length}</span></button>
+          </div>
+          <div className="sidebar-section">
+            <div className="sidebar-label">Categories</div>
+            {categories.map(cat => {
+              const catTasks = tasks.filter(t => t.category === cat);
+              const highCount = catTasks.filter(t => t.priority === 'high' && t.status !== 'done').length;
+              return (
+                <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: '2px', marginBottom: 4 }}>
+                  <button className={`sidebar-btn ${activeCategory === cat ? 'active' : ''}`} onClick={() => setActiveCategory(cat)} style={{ flex: 1 }}>
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{cat}</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      {highCount > 0 && <span style={{ fontSize: 9, fontWeight: 700, color: '#ef4444', background: '#fef2f2', padding: '1px 5px', borderRadius: 999 }}>{highCount}</span>}
+                      <span className="sidebar-count">{catTasks.length}</span>
+                    </span>
+                  </button>
+                </div>
+              );
+            })}
+            <div style={{ display: 'flex', gap: 4, marginTop: 8 }}>
+              <input className="field-input" style={{ flex: 1, fontSize: 12, padding: '4px 8px' }} placeholder="New category..." value={newCatName} onChange={(e) => setNewCatName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') addCategory(); }} />
+              <button style={{ background: '#2B9348', color: 'white', border: 'none', borderRadius: 6, padding: '4px 8px', fontSize: 11, cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit' }} disabled={!newCatName.trim()} onClick={addCategory}>Add</button>
+            </div>
+          </div>
+        </aside>
+
+        <main className="main">
+          <div className="filters">
+            <div className="search-wrap">{IC.search}<input ref={searchRef} className="search-input" placeholder="Search posts..." value={search} onChange={(e) => setSearch(e.target.value)} /></div>
+            <select className="filter-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}><option value="all">All Statuses</option>{STATUSES.map(s => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}</select>
+            <select className="filter-select" value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)}><option value="all">All Priorities</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
+            <select className="filter-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}><option value="priority">Sort: Priority</option><option value="status">Sort: Status</option><option value="title">Sort: Title</option><option value="deadline">Sort: Deadline</option></select>
+            <span className="results-count">{filtered.length} of {tasks.length} posts</span>
+          </div>
+
+          {filtered.length === 0 ? (
+            <div className="empty-state">No posts found. Create one to get started.</div>
+          ) : (
+            filtered.map(task => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                onUpdate={updateTask}
+                onDelete={deleteTask}
+                categories={categories}
+                isStarred={starred.has(task.id)}
+                onToggleStar={toggleStar}
+                userEmail={user.email}
+                addToast={addToast}
+                onOpenReview={setReviewingTaskId}
+              />
+            ))
+          )}
+        </main>
+      </div>
+
+      {showNew && <NewTaskModal onAdd={addTask} onClose={() => setShowNew(false)} categories={categories} />}
+      {showSuggest && <SuggestPostModal onAdd={suggestPost} onClose={() => setShowSuggest(false)} categories={categories} />}
+      {reviewingTask && <ReviewModal task={reviewingTask} onClose={() => setReviewingTaskId(null)} onUpdate={updateTask} userEmail={user.email} addToast={addToast} />}
+      <ToastContainer toasts={toasts} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
