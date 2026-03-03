@@ -1579,6 +1579,232 @@
     .rm-left { flex: 0 0 auto; max-height: 50vh; padding: 16px; }
     .rm-right { flex: 0 0 auto; border-left: none; border-top: 1px solid var(--color-border); }
   }
+
+  /* ─── INLINE REVIEW PANEL ─── */
+  .review-panel {
+    border-top: 1px solid var(--color-border);
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    padding: 20px;
+    animation: panelSlideIn 0.25s ease;
+  }
+
+  @keyframes panelSlideIn { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 800px; } }
+
+  .rp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .rp-grid { grid-template-columns: 1fr; }
+  }
+
+  .rp-media-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+
+  .rp-media-strip::-webkit-scrollbar { height: 4px; }
+  .rp-media-strip::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
+
+  .rp-thumb {
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  .rp-thumb:hover {
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+  }
+
+  .rp-caption-block {
+    background: white;
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--color-text);
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .rp-caption-block::-webkit-scrollbar { width: 4px; }
+  .rp-caption-block::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
+
+  .rp-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .rp-btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .rp-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+
+  .rp-btn-approve { background: #22c55e; color: white; }
+  .rp-btn-approve:hover { background: #16a34a; }
+  .rp-btn-submit { background: #3b82f6; color: white; }
+  .rp-btn-submit:hover { background: #2563eb; }
+  .rp-btn-changes { background: white; color: #b45309; border: 1px solid #fcd34d; }
+  .rp-btn-changes:hover { background: #fffbeb; }
+  .rp-btn-ghost { background: none; color: var(--color-text-lighter); padding: 8px 12px; font-size: 11px; }
+  .rp-btn-ghost:hover { color: var(--color-text); background: #f3f4f6; box-shadow: none; transform: none; }
+
+  .rp-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .rp-changes-form {
+    margin-top: 12px;
+    animation: fadeIn 0.15s ease;
+  }
+
+  .rp-changes-input {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 60px;
+    transition: border-color 0.15s;
+    margin-bottom: 10px;
+  }
+
+  .rp-changes-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(43, 147, 72, 0.1);
+  }
+
+  .rp-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--color-text-lighter);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+
+  /* ─── REVIEW TIMELINE ─── */
+  .rp-timeline {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .rp-timeline-item {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    padding-bottom: 16px;
+  }
+
+  .rp-timeline-item:last-child { padding-bottom: 0; }
+
+  .rp-timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 18px;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-border);
+  }
+
+  .rp-timeline-item:last-child::before { display: none; }
+
+  .rp-timeline-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px var(--color-border);
+  }
+
+  .rp-dot-submit { background: #3b82f6; box-shadow: 0 0 0 2px #93c5fd; }
+  .rp-dot-approve { background: #22c55e; box-shadow: 0 0 0 2px #86efac; }
+  .rp-dot-changes { background: #f59e0b; box-shadow: 0 0 0 2px #fcd34d; }
+  .rp-dot-undo { background: #9ca3af; box-shadow: 0 0 0 2px #d1d5db; }
+
+  .rp-timeline-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .rp-timeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .rp-timeline-author {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .rp-timeline-date {
+    font-size: 11px;
+    color: var(--color-text-lighter);
+  }
+
+  .rp-timeline-msg {
+    font-size: 12px;
+    color: #4b5563;
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  /* ─── REFINED CARD TINTS ─── */
+  .task-card.tint-review {
+    background: linear-gradient(135deg, #f8faff 0%, white 30%);
+  }
+
+  .task-card.tint-approved {
+    background: linear-gradient(135deg, #f0fdf4 0%, white 30%);
+  }
+
+  .task-card.tint-changes {
+    background: linear-gradient(135deg, #fffbeb 0%, white 30%);
+  }
+
+  /* Override border width for review states */
+  .task-card.review-submitted,
+  .task-card.review-approved,
+  .task-card.review-needs_changes {
+    border-left-width: 5px;
+  }
 </style>
 </head>
 <body>
@@ -2091,189 +2317,168 @@ function MediaViewer({ assets, mediaType, reviewMode = false }) {
   );
 }
 
-function ReviewModal({ task, onClose, onUpdate, userEmail, addToast }) {
+function ReviewPanel({ task, onUpdate, userEmail, addToast, onClose }) {
   const rs = task.review_status || "none";
   const notes = task.review_notes || [];
   const [msg, setMsg] = useState("");
   const [showChangesForm, setShowChangesForm] = useState(false);
-  const [imgComments, setImgComments] = useState({});
+  const caps = task.captions || {};
+  const caption = caps["LinkedIn"] || "";
 
-  useEffect(() => {
-    const h = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', h);
-    return () => document.removeEventListener('keydown', h);
-  }, [onClose]);
-
-  const addReviewNote = (type, message, image_comments) => {
+  const addNote = (type, message) => {
     const entry = { author: userEmail, date: new Date().toISOString(), type, message };
-    if (image_comments && Object.keys(image_comments).length > 0) entry.image_comments = image_comments;
     return [...notes, entry];
   };
 
   const submitForReview = () => {
-    onUpdate({ ...task, review_status: "submitted", review_notes: addReviewNote("submit", msg || "Ready for review") });
-    setMsg("");
-    addToast("Submitted for review");
+    onUpdate({ ...task, review_status: "submitted", review_notes: addNote("submit", msg || "Ready for review") });
+    setMsg(""); addToast("Submitted for review");
   };
 
   const resubmit = () => {
-    onUpdate({ ...task, review_status: "resubmitted", review_notes: addReviewNote("resubmit", msg || "Updated and resubmitted") });
-    setMsg("");
-    addToast("Resubmitted for review");
+    onUpdate({ ...task, review_status: "resubmitted", review_notes: addNote("resubmit", msg || "Updated and resubmitted") });
+    setMsg(""); addToast("Resubmitted for review");
   };
 
   const approve = () => {
-    onUpdate({ ...task, review_status: "approved", review_notes: addReviewNote("approve", msg || "Approved!") });
-    setMsg("");
-    addToast("Post approved!");
+    onUpdate({ ...task, review_status: "approved", review_notes: addNote("approve", msg || "Approved!") });
+    setMsg(""); addToast("Post approved!");
   };
 
   const requestChanges = () => {
-    onUpdate({ ...task, review_status: "needs_changes", review_notes: addReviewNote("changes", msg, imgComments) });
-    setMsg("");
-    setImgComments({});
-    setShowChangesForm(false);
-    addToast("Changes requested");
+    onUpdate({ ...task, review_status: "needs_changes", review_notes: addNote("changes", msg) });
+    setMsg(""); setShowChangesForm(false); addToast("Changes requested");
   };
 
   const undoReview = () => {
-    if (!confirm("Return this task to editing? Review status will be reset.")) return;
-    onUpdate({ ...task, review_status: "none", review_notes: addReviewNote("undo", "Returned to editing") });
+    onUpdate({ ...task, review_status: "none", review_notes: addNote("undo", "Returned to editing") });
     addToast("Returned to editing");
   };
 
   const isReviewable = rs === "submitted" || rs === "resubmitted";
   const canSubmit = rs === "none";
   const canResubmit = rs === "needs_changes";
-  const formatDate = (d) => {
-    try {
-      return new Date(d).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-    } catch {
-      return d;
-    }
+  const images = task.image_urls || [];
+
+  const fmtDate = (d) => {
+    try { return new Date(d).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); }
+    catch { return d; }
   };
-  const typeLabels = { submit: "Submitted", resubmit: "Resubmitted", changes: "Changes Requested", approve: "Approved" };
-  const caps = task.captions || {};
+
+  const dotClass = { submit: 'rp-dot-submit', resubmit: 'rp-dot-submit', approve: 'rp-dot-approve', changes: 'rp-dot-changes', undo: 'rp-dot-undo' };
+  const typeLabel = { submit: 'Submitted for review', resubmit: 'Resubmitted', approve: 'Approved', changes: 'Changes requested', undo: 'Returned to editing' };
 
   return (
-    <div className="rm-overlay" onClick={onClose}>
-      <div className="rm-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="rm-close" onClick={onClose}>×</button>
-        <div className="rm-body">
-          <div className="rm-left">
-            {(task.image_urls || []).length > 0 ? (
-              <MediaViewer assets={task.image_urls} mediaType={task.media_type || "single"} reviewMode={showChangesForm} />
-            ) : (
-              <div style={{ color: '#64748b', fontSize: 14, textAlign: 'center', padding: 40 }}>
-                No media uploaded yet.<br />Upload images or video from the task card.
+    <div className="review-panel">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <span className="rp-section-label" style={{ margin: 0 }}>Review</span>
+        <button className="rp-btn-ghost rp-btn" onClick={onClose} style={{ padding: '4px 8px' }}>{IC.x}</button>
+      </div>
+
+      <div className="rp-grid">
+        {/* Left: Media + Caption */}
+        <div>
+          {images.length > 0 && (
+            <div>
+              <div className="rp-section-label">Media</div>
+              <div className="rp-media-strip">
+                {images.map((img, i) => (
+                  <img key={i} src={img.url} className="rp-thumb" alt={img.name || `Image ${i+1}`} />
+                ))}
               </div>
-            )}
-          </div>
-          <div className="rm-right">
-            <div className="rm-right-inner">
-              <div className="rm-header">
-                <h2 className="rm-title">{task.title}</h2>
-                <div className="rm-meta">
-                  <span className="task-category">{task.category}</span>
-                  {rs !== "none" && <span style={{ fontSize: 10, fontWeight: 600, color: '#6B7280', textTransform: 'uppercase' }}>{REVIEW_LABELS[rs]}</span>}
-                </div>
-              </div>
-
-              {task.description && (
-                <div className="rm-section">
-                  <div className="rm-section-title">Description</div>
-                  <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.6, margin: 0 }}>{task.description}</p>
-                </div>
-              )}
-
-              <div className="rm-divider" />
-
-              <div className="rm-section">
-                <div className="rm-section-title">LinkedIn Caption</div>
-                <div className="rm-caption-text">
-                  {caps["LinkedIn"] ? caps["LinkedIn"] : <span className="rm-caption-empty">No caption yet.</span>}
-                </div>
-              </div>
-
-              <div className="rm-divider" />
-
-              <div className="rm-section">
-                <div className="rm-section-title">Review</div>
-
-                {canSubmit && (
-                  <div>
-                    <textarea className="review-note-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Optional message for reviewer..." rows={2} />
-                    <button className="btn-review btn-submit-review" onClick={submitForReview}>Submit for Review</button>
-                  </div>
-                )}
-
-                {canResubmit && (
-                  <div>
-                    <textarea className="review-note-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="What did you change?" rows={2} />
-                    <button className="btn-review btn-submit-review" onClick={resubmit}>Resubmit for Review</button>
-                  </div>
-                )}
-
-                {isReviewable && (
-                  <div>
-                    {!showChangesForm ? (
-                      <div style={{ display: 'flex', gap: 8, flexDirection: 'column' }}>
-                        <button className="btn-review btn-approve" onClick={approve}>Approve</button>
-                        <button className="btn-review btn-request-changes" onClick={() => setShowChangesForm(true)}>Request Changes</button>
-                        <button className="btn-sm" onClick={undoReview} style={{ color: '#6B7280', fontSize: 11 }}>Undo — return to editing</button>
-                      </div>
-                    ) : (
-                      <div style={{ width: '100%' }}>
-                        <p style={{ fontSize: 12, fontWeight: 600, color: '#4b5563', marginBottom: 6 }}>Describe what needs changing.</p>
-                        <textarea className="review-note-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="What needs to change?" rows={3} />
-                        <div style={{ display: 'flex', gap: 8 }}>
-                          <button className="btn-review btn-request-changes" onClick={requestChanges} disabled={!msg.trim()}>Send Feedback</button>
-                          <button className="btn-sm" onClick={() => { setShowChangesForm(false); setImgComments({}); }}>Cancel</button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {rs === "approved" && (
-                  <div>
-                    <p style={{ fontSize: 13, color: '#15803d', fontWeight: 500, margin: 0 }}>This post has been approved and is ready to go live.</p>
-                    <button className="btn-sm" onClick={undoReview} style={{ color: '#6B7280', fontSize: 11, marginTop: 4 }}>Undo approval — return to editing</button>
-                  </div>
-                )}
-              </div>
-
-              {notes.length > 0 && (
-                <>
-                  <div className="rm-divider" />
-                  <div className="rm-section">
-                    <div className="rm-section-title">Review History</div>
-                    <div className="review-history">
-                      {[...notes].reverse().map((n, i) => (
-                        <div key={i} className="review-entry">
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                            <span className="review-entry-author">{n.author}</span>
-                            <span className="review-entry-date">{formatDate(n.date)}</span>
-                          </div>
-                          {n.message && <p style={{ fontSize: 12, color: '#4b5563', margin: 0 }}>{n.message}</p>}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              )}
             </div>
-          </div>
+          )}
+          <div className="rp-section-label">LinkedIn Caption</div>
+          {caption ? (
+            <div className="rp-caption-block">{caption}</div>
+          ) : (
+            <div className="rp-caption-block" style={{ color: 'var(--color-text-lighter)', fontStyle: 'italic' }}>No caption written yet.</div>
+          )}
+          {caption && (
+            <button className="rp-btn rp-btn-ghost" style={{ marginTop: 6, fontSize: 11 }} onClick={() => { navigator.clipboard.writeText(caption); addToast("Caption copied"); }}>
+              Copy caption
+            </button>
+          )}
+        </div>
+
+        {/* Right: Actions */}
+        <div>
+          <div className="rp-section-label">Status & Actions</div>
+
+          {canSubmit && (
+            <div>
+              <textarea className="rp-changes-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Optional note for reviewer..." rows={2} />
+              <div className="rp-actions" style={{ marginTop: 8 }}>
+                <button className="rp-btn rp-btn-submit" onClick={submitForReview}>Submit for Review</button>
+              </div>
+            </div>
+          )}
+
+          {canResubmit && (
+            <div>
+              <textarea className="rp-changes-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="What did you change?" rows={2} />
+              <div className="rp-actions" style={{ marginTop: 8 }}>
+                <button className="rp-btn rp-btn-submit" onClick={resubmit}>Resubmit for Review</button>
+              </div>
+            </div>
+          )}
+
+          {isReviewable && !showChangesForm && (
+            <div>
+              <p style={{ fontSize: 13, color: '#3b82f6', fontWeight: 500, marginBottom: 12 }}>This post is awaiting your review.</p>
+              <div className="rp-actions">
+                <button className="rp-btn rp-btn-approve" onClick={approve}>Approve</button>
+                <button className="rp-btn rp-btn-changes" onClick={() => setShowChangesForm(true)}>Request Changes</button>
+                <button className="rp-btn rp-btn-ghost" onClick={undoReview}>Undo</button>
+              </div>
+            </div>
+          )}
+
+          {isReviewable && showChangesForm && (
+            <div className="rp-changes-form">
+              <p style={{ fontSize: 12, fontWeight: 600, color: '#4b5563', marginBottom: 8 }}>What needs to change?</p>
+              <textarea className="rp-changes-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Describe the changes needed..." rows={3} autoFocus />
+              <div className="rp-actions">
+                <button className="rp-btn rp-btn-changes" onClick={requestChanges} disabled={!msg.trim()}>Send Feedback</button>
+                <button className="rp-btn rp-btn-ghost" onClick={() => { setShowChangesForm(false); setMsg(""); }}>Cancel</button>
+              </div>
+            </div>
+          )}
+
+          {rs === "approved" && (
+            <div>
+              <p style={{ fontSize: 13, color: '#15803d', fontWeight: 500, marginBottom: 8 }}>This post is approved and ready to publish.</p>
+              <button className="rp-btn rp-btn-ghost" onClick={undoReview}>Undo approval</button>
+            </div>
+          )}
+
+          {/* Timeline */}
+          {notes.length > 0 && (
+            <div className="rp-timeline">
+              <div className="rp-section-label">History</div>
+              {[...notes].reverse().map((n, i) => (
+                <div key={i} className="rp-timeline-item">
+                  <div className={`rp-timeline-dot ${dotClass[n.type] || 'rp-dot-undo'}`} />
+                  <div className="rp-timeline-content">
+                    <div className="rp-timeline-header">
+                      <span className="rp-timeline-author">{typeLabel[n.type] || n.type}</span>
+                      <span className="rp-timeline-date">{fmtDate(n.date)}</span>
+                    </div>
+                    {n.message && <p className="rp-timeline-msg">{n.message}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleStar, forceExpand, userEmail, addToast, onOpenReview, isSelected, onToggleSelect }) {
+function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleStar, forceExpand, userEmail, addToast, isSelected, onToggleSelect }) {
   const [expanded, setExpanded] = useState(false);
+  const [showReview, setShowReview] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
   const [titleDraft, setTitleDraft] = useState(task.title);
   const titleRef = useRef(null);
@@ -2303,7 +2508,8 @@ function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleSta
   };
 
   const reviewStatusClass = task.review_status === 'submitted' || task.review_status === 'resubmitted' ? 'review-submitted' : task.review_status === 'approved' ? 'review-approved' : task.review_status === 'needs_changes' ? 'review-needs_changes' : '';
-  const cardClass = `task-card ${task.status === 'done' ? 'done' : ''} p-${task.priority} ${isStarred ? 'starred' : ''} ${reviewStatusClass}`;
+  const tintClass = (task.review_status === 'submitted' || task.review_status === 'resubmitted') ? 'tint-review' : task.review_status === 'approved' ? 'tint-approved' : task.review_status === 'needs_changes' ? 'tint-changes' : '';
+  const cardClass = `task-card ${task.status === 'done' ? 'done' : ''} p-${task.priority} ${isStarred ? 'starred' : ''} ${reviewStatusClass} ${tintClass}`;
 
   return (
     <div className={cardClass} style={{ paddingLeft: task.review_status && task.review_status !== 'none' ? 18 : 16, paddingTop: 18, paddingRight: 18, paddingBottom: 18 }}>
@@ -2406,11 +2612,11 @@ function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleSta
             {task.deadline && <span className="task-deadline">📅 {task.deadline}</span>}
             {(task.image_urls || []).length > 0 && <span style={{ fontSize: 11, color: '#6B7280' }}>🖼️ {task.image_urls.length}</span>}
             {task.review_status === 'submitted' || task.review_status === 'resubmitted' ? (
-              <span className="review-badge review-badge-submitted">🔍 In Review</span>
+              <span className="review-badge review-badge-submitted">In Review</span>
             ) : task.review_status === 'approved' ? (
-              <span className="review-badge review-badge-approved">✓ Approved</span>
+              <span className="review-badge review-badge-approved">Approved</span>
             ) : task.review_status === 'needs_changes' ? (
-              <span className="review-badge review-badge-needs_changes">⚠ Changes Requested</span>
+              <span className="review-badge review-badge-needs_changes">Changes Needed</span>
             ) : null}
             {task.review_status === 'none' && (
               <button
@@ -2525,9 +2731,9 @@ function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleSta
             <div style={{ paddingTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
               <button
                 className="btn-secondary"
-                onClick={() => onOpenReview && onOpenReview(task.id)}
+                onClick={() => setShowReview(!showReview)}
               >
-                Open Review
+                {showReview ? 'Close Review' : 'Open Review'}
               </button>
               <button className="btn-danger" onClick={() => { if (confirm("Delete this task?")) onDelete(task.id); }}>
                 {IC.trash} Delete task
@@ -2536,6 +2742,9 @@ function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleSta
           </div>
         )}
       </div>
+      {showReview && (
+        <ReviewPanel task={task} onUpdate={onUpdate} userEmail={userEmail} addToast={addToast} onClose={() => setShowReview(false)} />
+      )}
     </div>
   );
 }
@@ -2869,7 +3078,6 @@ function App() {
   const [synced, setSynced] = useState(false);
   const [newCatName, setNewCatName] = useState("");
   const [editingCat, setEditingCat] = useState(null);
-  const [reviewingTaskId, setReviewingTaskId] = useState(null);
   const [selected, setSelected] = useState(new Set());
   const { starred, toggle: toggleStar } = useStarred();
   const { toasts, add: addToast } = useToast();
@@ -3096,8 +3304,6 @@ function App() {
     setSelected(new Set());
   };
 
-  const reviewingTask = reviewingTaskId ? tasks.find(t => t.id === reviewingTaskId) : null;
-
   return (
     <div className="app">
       <header className="header">
@@ -3213,7 +3419,6 @@ function App() {
                 onToggleStar={toggleStar}
                 userEmail={user.email}
                 addToast={addToast}
-                onOpenReview={setReviewingTaskId}
                 isSelected={selected.has(task.id)}
                 onToggleSelect={() => toggleTaskSelection(task.id)}
               />
@@ -3224,7 +3429,6 @@ function App() {
 
       {showNew && <NewTaskModal onAdd={addTask} onClose={() => setShowNew(false)} categories={categories} />}
       {showSuggest && <SuggestPostModal onAdd={suggestPost} onClose={() => setShowSuggest(false)} categories={categories} />}
-      {reviewingTask && <ReviewModal task={reviewingTask} onClose={() => setReviewingTaskId(null)} onUpdate={updateTask} userEmail={user.email} addToast={addToast} />}
       <ToastContainer toasts={toasts} />
     </div>
   );
