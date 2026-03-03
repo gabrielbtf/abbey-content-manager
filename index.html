@@ -265,6 +265,21 @@
     font-weight: 600;
   }
 
+  .sidebar-cat-row .cat-action-btn {
+    opacity: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    color: var(--color-text-lighter);
+    font-size: 13px;
+    transition: opacity 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+  .sidebar-cat-row:hover .cat-action-btn { opacity: 1; }
+  .cat-action-btn:hover { color: var(--color-primary); }
+  .cat-action-btn.cat-del:hover { color: #d32f2f; }
+
   .sidebar-count {
     font-size: 12px;
     color: var(--color-text-lighter);
@@ -2427,7 +2442,10 @@ function NewTaskModal({ onAdd, onClose, categories }) {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState(categories[0] || "");
   const [priority, setPriority] = useState("medium");
+  const [docs, setDocs] = useState([]);
+  const [uploading, setUploading] = useState(false);
   const ref = useRef(null);
+  const fileRef = useRef(null);
 
   useEffect(() => { ref.current?.focus(); }, []);
 
@@ -2436,6 +2454,32 @@ function NewTaskModal({ onAdd, onClose, categories }) {
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
   }, [onClose]);
+
+  const DOC_ACCEPT = '.pdf,.doc,.docx,.txt,.rtf,.odt,.xls,.xlsx,.ppt,.pptx';
+  const handleDocFiles = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    setUploading(true);
+    const tmpId = 'new_' + Date.now();
+    const newDocs = [...docs];
+    for (const file of files) {
+      const path = `tasks/${tmpId}/docs/${Date.now()}_${file.name}`;
+      const { error } = await supabase.storage.from('assets').upload(path, file);
+      if (!error) {
+        const { data } = supabase.storage.from('assets').getPublicUrl(path);
+        newDocs.push({ url: data.publicUrl, path, name: file.name, size: file.size });
+      }
+    }
+    setDocs(newDocs);
+    setUploading(false);
+    e.target.value = '';
+  };
+
+  const removeDoc = (idx) => {
+    const doc = docs[idx];
+    supabase.storage.from('assets').remove([doc.path]);
+    setDocs(docs.filter((_, i) => i !== idx));
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -2447,7 +2491,7 @@ function NewTaskModal({ onAdd, onClose, categories }) {
           placeholder="Post title..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter' && title.trim()) onAdd({ title: title.trim(), category, priority }); }}
+          onKeyDown={(e) => { if (e.key === 'Enter' && title.trim()) onAdd({ title: title.trim(), category, priority, doc_urls: docs }); }}
         />
         <select className="modal-field" value={category} onChange={(e) => setCategory(e.target.value)}>
           {categories.map(c => <option key={c}>{c}</option>)}
@@ -2457,9 +2501,26 @@ function NewTaskModal({ onAdd, onClose, categories }) {
           <option value="medium">Medium Priority</option>
           <option value="low">Low Priority</option>
         </select>
+        <div style={{ marginBottom: 12 }}>
+          <label style={{ fontSize: 13, color: 'var(--color-text-light)', display: 'block', marginBottom: 6 }}>Attach Documents</label>
+          <input ref={fileRef} type="file" accept={DOC_ACCEPT} multiple onChange={handleDocFiles} style={{ display: 'none' }} />
+          <button type="button" className="modal-cancel" style={{ fontSize: 12, padding: '6px 12px' }} onClick={() => fileRef.current?.click()} disabled={uploading}>
+            {uploading ? 'Uploading...' : '+ Add Files'}
+          </button>
+          {docs.length > 0 && (
+            <div style={{ marginTop: 8 }}>
+              {docs.map((d, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '3px 0' }}>
+                  <span>📄 {d.name}</span>
+                  <button onClick={() => removeDoc(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d32f2f', fontSize: 14, padding: 0 }}>×</button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="modal-actions">
           <button className="modal-cancel" onClick={onClose}>Cancel</button>
-          <button className="modal-confirm" disabled={!title.trim()} onClick={() => { if (title.trim()) onAdd({ title: title.trim(), category, priority }); }}>
+          <button className="modal-confirm" disabled={!title.trim() || uploading} onClick={() => { if (title.trim()) onAdd({ title: title.trim(), category, priority, doc_urls: docs }); }}>
             Create Post
           </button>
         </div>
@@ -2473,7 +2534,10 @@ function SuggestPostModal({ onAdd, onClose, categories }) {
   const [url, setUrl] = useState("");
   const [notes, setNotes] = useState("");
   const [category, setCategory] = useState(categories[0] || "");
+  const [docs, setDocs] = useState([]);
+  const [uploading, setUploading] = useState(false);
   const ref = useRef(null);
+  const fileRef = useRef(null);
 
   useEffect(() => { ref.current?.focus(); }, []);
   useEffect(() => {
@@ -2481,6 +2545,32 @@ function SuggestPostModal({ onAdd, onClose, categories }) {
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
   }, [onClose]);
+
+  const DOC_ACCEPT = '.pdf,.doc,.docx,.txt,.rtf,.odt,.xls,.xlsx,.ppt,.pptx';
+  const handleDocFiles = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    setUploading(true);
+    const tmpId = 'suggest_' + Date.now();
+    const newDocs = [...docs];
+    for (const file of files) {
+      const path = `tasks/${tmpId}/docs/${Date.now()}_${file.name}`;
+      const { error } = await supabase.storage.from('assets').upload(path, file);
+      if (!error) {
+        const { data } = supabase.storage.from('assets').getPublicUrl(path);
+        newDocs.push({ url: data.publicUrl, path, name: file.name, size: file.size });
+      }
+    }
+    setDocs(newDocs);
+    setUploading(false);
+    e.target.value = '';
+  };
+
+  const removeDoc = (idx) => {
+    const doc = docs[idx];
+    supabase.storage.from('assets').remove([doc.path]);
+    setDocs(docs.filter((_, i) => i !== idx));
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -2510,13 +2600,30 @@ function SuggestPostModal({ onAdd, onClose, categories }) {
         <select className="modal-field" value={category} onChange={(e) => setCategory(e.target.value)}>
           {categories.map(c => <option key={c}>{c}</option>)}
         </select>
+        <div style={{ marginBottom: 12 }}>
+          <label style={{ fontSize: 13, color: 'var(--color-text-light)', display: 'block', marginBottom: 6 }}>Attach Documents</label>
+          <input ref={fileRef} type="file" accept={DOC_ACCEPT} multiple onChange={handleDocFiles} style={{ display: 'none' }} />
+          <button type="button" className="modal-cancel" style={{ fontSize: 12, padding: '6px 12px' }} onClick={() => fileRef.current?.click()} disabled={uploading}>
+            {uploading ? 'Uploading...' : '+ Add Files'}
+          </button>
+          {docs.length > 0 && (
+            <div style={{ marginTop: 8 }}>
+              {docs.map((d, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '3px 0' }}>
+                  <span>📄 {d.name}</span>
+                  <button onClick={() => removeDoc(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d32f2f', fontSize: 14, padding: 0 }}>×</button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="modal-actions">
           <button className="modal-cancel" onClick={onClose}>Cancel</button>
           <button
             className="modal-confirm"
-            disabled={!title.trim()}
+            disabled={!title.trim() || uploading}
             onClick={() => {
-              if (title.trim()) onAdd({ title: title.trim(), category, url, notes });
+              if (title.trim()) onAdd({ title: title.trim(), category, url, notes, doc_urls: docs });
             }}
           >
             Submit Suggestion
@@ -2659,6 +2766,7 @@ function App() {
   const [sortBy, setSortBy] = useState("priority");
   const [synced, setSynced] = useState(false);
   const [newCatName, setNewCatName] = useState("");
+  const [editingCat, setEditingCat] = useState(null);
   const [reviewingTaskId, setReviewingTaskId] = useState(null);
   const { starred, toggle: toggleStar } = useStarred();
   const { toasts, add: addToast } = useToast();
@@ -2720,7 +2828,7 @@ function App() {
     addToast("Post deleted");
   };
 
-  const addTask = async ({ title, category, priority }) => {
+  const addTask = async ({ title, category, priority, doc_urls }) => {
     await supabase.from('tasks').insert({
       title,
       category,
@@ -2732,7 +2840,7 @@ function App() {
       captions: { ...EMPTY_CAPTIONS },
       subtasks: [],
       image_urls: [],
-      doc_urls: [],
+      doc_urls: doc_urls || [],
       review_status: 'none',
       review_notes: [],
       media_type: 'single',
@@ -2742,7 +2850,7 @@ function App() {
     addToast(`"${title}" added`);
   };
 
-  const suggestPost = async ({ title, category, url, notes }) => {
+  const suggestPost = async ({ title, category, url, notes, doc_urls }) => {
     const note = url ? `💡 Suggested by ${user.email}\nResource: ${url}${notes ? '\nContext: ' + notes : ''}` : `💡 Suggested by ${user.email}${notes ? '\nContext: ' + notes : ''}`;
     await supabase.from('tasks').insert({
       title,
@@ -2755,7 +2863,7 @@ function App() {
       captions: { ...EMPTY_CAPTIONS },
       subtasks: [],
       image_urls: [],
-      doc_urls: [],
+      doc_urls: doc_urls || [],
       review_status: 'none',
       review_notes: [],
       media_type: 'single',
@@ -2842,6 +2950,14 @@ function App() {
       <header className="header">
         <div className="header-inner">
           <div className="logo">
+            <svg width="38" height="38" viewBox="0 0 100 100" style={{flexShrink:0}}>
+              <defs>
+                <linearGradient id="taupeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#B8A99A"/><stop offset="100%" stopColor="#8C7B6B"/></linearGradient>
+                <linearGradient id="greenGrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#1B7A35"/><stop offset="100%" stopColor="#2B9348"/></linearGradient>
+              </defs>
+              <path d="M15 85 Q10 88 18 78 L48 12 Q52 5 54 12 L60 30 Q50 55 30 78 Q22 88 15 85Z" fill="url(#taupeGrad)"/>
+              <path d="M50 28 L58 12 Q62 5 64 12 L85 78 Q90 88 82 85 Q70 80 58 65 Q48 50 50 28Z" fill="url(#greenGrad)"/>
+            </svg>
             <div>
               <div className="logo-text">ABBEY <span className="logo-text-light">CONSULTANTS</span></div>
               <div className="header-sub"><span className={`sync-dot`} style={{ background: synced ? '#22c55e' : '#ef4444' }} />{synced ? "Live — syncing" : "Connecting..."}</div>
@@ -2876,14 +2992,29 @@ function App() {
               const catTasks = tasks.filter(t => t.category === cat);
               const highCount = catTasks.filter(t => t.priority === 'high' && t.status !== 'done').length;
               return (
-                <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: '2px', marginBottom: 4 }}>
-                  <button className={`sidebar-btn ${activeCategory === cat ? 'active' : ''}`} onClick={() => setActiveCategory(cat)} style={{ flex: 1 }}>
-                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{cat}</span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      {highCount > 0 && <span style={{ fontSize: 9, fontWeight: 700, color: '#ef4444', background: '#fef2f2', padding: '1px 5px', borderRadius: 999 }}>{highCount}</span>}
-                      <span className="sidebar-count">{catTasks.length}</span>
-                    </span>
-                  </button>
+                <div key={cat} className="sidebar-cat-row" style={{ display: 'flex', alignItems: 'center', gap: '2px', marginBottom: 4 }}>
+                  {editingCat === cat ? (
+                    <input
+                      className="field-input"
+                      style={{ flex: 1, fontSize: 12, padding: '4px 8px' }}
+                      defaultValue={cat}
+                      autoFocus
+                      onBlur={(e) => { const v = e.target.value.trim(); if (v && v !== cat) renameCategory(cat, v); setEditingCat(null); }}
+                      onKeyDown={(e) => { if (e.key === 'Enter') { const v = e.target.value.trim(); if (v && v !== cat) renameCategory(cat, v); setEditingCat(null); } if (e.key === 'Escape') setEditingCat(null); }}
+                    />
+                  ) : (
+                    <>
+                      <button className={`sidebar-btn ${activeCategory === cat ? 'active' : ''}`} onClick={() => setActiveCategory(cat)} style={{ flex: 1 }}>
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{cat}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                          {highCount > 0 && <span style={{ fontSize: 9, fontWeight: 700, color: '#ef4444', background: '#fef2f2', padding: '1px 5px', borderRadius: 999 }}>{highCount}</span>}
+                          <span className="sidebar-count">{catTasks.length}</span>
+                        </span>
+                      </button>
+                      <button className="cat-action-btn" onClick={() => setEditingCat(cat)} title="Rename">{IC.edit}</button>
+                      <button className="cat-action-btn cat-del" onClick={() => deleteCategory(cat)} title="Delete">{IC.x}</button>
+                    </>
+                  )}
                 </div>
               );
             })}
