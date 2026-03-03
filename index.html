@@ -1580,211 +1580,6 @@
     .rm-right { flex: 0 0 auto; border-left: none; border-top: 1px solid var(--color-border); }
   }
 
-  /* ─── INLINE REVIEW PANEL ─── */
-  .review-panel {
-    border-top: 1px solid var(--color-border);
-    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-    padding: 20px;
-    animation: panelSlideIn 0.25s ease;
-  }
-
-  @keyframes panelSlideIn { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 800px; } }
-
-  .rp-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-
-  @media (max-width: 768px) {
-    .rp-grid { grid-template-columns: 1fr; }
-  }
-
-  .rp-media-strip {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    margin-bottom: 12px;
-  }
-
-  .rp-media-strip::-webkit-scrollbar { height: 4px; }
-  .rp-media-strip::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
-
-  .rp-thumb {
-    width: 72px;
-    height: 72px;
-    border-radius: 8px;
-    object-fit: cover;
-    border: 2px solid transparent;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all 0.15s;
-  }
-
-  .rp-thumb:hover {
-    border-color: var(--color-primary);
-    transform: scale(1.05);
-  }
-
-  .rp-caption-block {
-    background: white;
-    border: 1px solid var(--color-border);
-    border-left: 3px solid var(--color-primary);
-    border-radius: 8px;
-    padding: 14px 16px;
-    font-size: 13px;
-    line-height: 1.7;
-    color: var(--color-text);
-    max-height: 200px;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-
-  .rp-caption-block::-webkit-scrollbar { width: 4px; }
-  .rp-caption-block::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
-
-  .rp-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 16px;
-  }
-
-  .rp-btn {
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .rp-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
-
-  .rp-btn-approve { background: #22c55e; color: white; }
-  .rp-btn-approve:hover { background: #16a34a; }
-  .rp-btn-submit { background: #3b82f6; color: white; }
-  .rp-btn-submit:hover { background: #2563eb; }
-  .rp-btn-changes { background: white; color: #b45309; border: 1px solid #fcd34d; }
-  .rp-btn-changes:hover { background: #fffbeb; }
-  .rp-btn-ghost { background: none; color: var(--color-text-lighter); padding: 8px 12px; font-size: 11px; }
-  .rp-btn-ghost:hover { color: var(--color-text); background: #f3f4f6; box-shadow: none; transform: none; }
-
-  .rp-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-
-  .rp-changes-form {
-    margin-top: 12px;
-    animation: fadeIn 0.15s ease;
-  }
-
-  .rp-changes-input {
-    width: 100%;
-    border: 1px solid var(--color-border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 13px;
-    outline: none;
-    font-family: inherit;
-    resize: vertical;
-    min-height: 60px;
-    transition: border-color 0.15s;
-    margin-bottom: 10px;
-  }
-
-  .rp-changes-input:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(43, 147, 72, 0.1);
-  }
-
-  .rp-section-label {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--color-text-lighter);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-  }
-
-  /* ─── REVIEW TIMELINE ─── */
-  .rp-timeline {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .rp-timeline-item {
-    display: flex;
-    gap: 12px;
-    position: relative;
-    padding-bottom: 16px;
-  }
-
-  .rp-timeline-item:last-child { padding-bottom: 0; }
-
-  .rp-timeline-item::before {
-    content: '';
-    position: absolute;
-    left: 7px;
-    top: 18px;
-    bottom: 0;
-    width: 2px;
-    background: var(--color-border);
-  }
-
-  .rp-timeline-item:last-child::before { display: none; }
-
-  .rp-timeline-dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 2px;
-    border: 2px solid white;
-    box-shadow: 0 0 0 2px var(--color-border);
-  }
-
-  .rp-dot-submit { background: #3b82f6; box-shadow: 0 0 0 2px #93c5fd; }
-  .rp-dot-approve { background: #22c55e; box-shadow: 0 0 0 2px #86efac; }
-  .rp-dot-changes { background: #f59e0b; box-shadow: 0 0 0 2px #fcd34d; }
-  .rp-dot-undo { background: #9ca3af; box-shadow: 0 0 0 2px #d1d5db; }
-
-  .rp-timeline-content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .rp-timeline-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .rp-timeline-author {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-text);
-  }
-
-  .rp-timeline-date {
-    font-size: 11px;
-    color: var(--color-text-lighter);
-  }
-
-  .rp-timeline-msg {
-    font-size: 12px;
-    color: #4b5563;
-    margin-top: 3px;
-    line-height: 1.5;
-  }
 
   /* ─── REFINED CARD TINTS ─── */
   .task-card.tint-review {
@@ -1804,6 +1599,401 @@
   .task-card.review-approved,
   .task-card.review-needs_changes {
     border-left-width: 5px;
+  }
+
+  /* ─── REVIEW SCREEN (Presentation Mode) ─── */
+  .rs-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.94);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .rs-top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    z-index: 202;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+  }
+
+  .rs-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .rs-title-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+  }
+
+  .rs-close-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    backdrop-filter: blur(10px);
+  }
+
+  .rs-close-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.05);
+  }
+
+  .rs-media-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 60px 140px;
+    position: relative;
+    min-height: 0;
+  }
+
+  .rs-media-area img {
+    max-width: 90vw;
+    max-height: 78vh;
+    object-fit: contain;
+    border-radius: 8px;
+    user-select: none;
+  }
+
+  .rs-media-area iframe {
+    width: 70vw;
+    height: 78vh;
+    border: none;
+    border-radius: 8px;
+    background: white;
+  }
+
+  .rs-media-area video {
+    max-width: 90vw;
+    max-height: 78vh;
+    border-radius: 8px;
+  }
+
+  .rs-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    z-index: 201;
+  }
+
+  .rs-nav:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .rs-nav-prev { left: 20px; }
+  .rs-nav-next { right: 20px; }
+
+  .rs-counter {
+    position: absolute;
+    bottom: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .rs-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .rs-dot.active {
+    background: white;
+    width: 10px;
+    height: 10px;
+  }
+
+  .rs-slide-num {
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 8px;
+  }
+
+  /* ─── Bottom Bar ─── */
+  .rs-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    z-index: 203;
+    padding: 0;
+    transition: all 0.3s ease;
+  }
+
+  .rs-bar-main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .rs-caption-area {
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  .rs-caption-preview {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    transition: all 0.2s;
+  }
+
+  .rs-caption-preview.expanded {
+    -webkit-line-clamp: unset;
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+  }
+
+  .rs-caption-preview::-webkit-scrollbar { width: 4px; }
+  .rs-caption-preview::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+
+  .rs-caption-empty {
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+    font-size: 13px;
+  }
+
+  .rs-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .rs-action {
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    border: none;
+    white-space: nowrap;
+  }
+
+  .rs-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  .rs-action:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .rs-action-approve { background: #22c55e; color: white; }
+  .rs-action-approve:hover { background: #16a34a; }
+  .rs-action-submit { background: #3b82f6; color: white; }
+  .rs-action-submit:hover { background: #2563eb; }
+  .rs-action-changes { background: rgba(255,255,255,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+  .rs-action-changes:hover { background: rgba(251,191,36,0.15); }
+  .rs-action-ghost { background: none; color: rgba(255,255,255,0.5); padding: 8px 12px; font-size: 12px; }
+  .rs-action-ghost:hover { color: rgba(255,255,255,0.8); box-shadow: none; transform: none; }
+  .rs-action-copy { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+  .rs-action-copy:hover { background: rgba(255,255,255,0.15); color: white; }
+
+  .rs-history-btn {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.6);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .rs-history-btn:hover { background: rgba(255,255,255,0.15); color: white; }
+
+  .rs-history-count {
+    background: rgba(255,255,255,0.2);
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 10px;
+  }
+
+  /* ─── History Drawer ─── */
+  .rs-drawer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .rs-drawer.open {
+    max-height: 300px;
+  }
+
+  .rs-drawer-inner {
+    padding: 16px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  .rs-drawer-inner::-webkit-scrollbar { width: 4px; }
+  .rs-drawer-inner::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+
+  .rs-timeline-item {
+    display: flex;
+    gap: 12px;
+    padding-bottom: 12px;
+    position: relative;
+  }
+
+  .rs-timeline-item:last-child { padding-bottom: 0; }
+
+  .rs-timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 18px;
+    bottom: 0;
+    width: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .rs-timeline-item:last-child::before { display: none; }
+
+  .rs-tl-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .rs-tl-submit { background: #3b82f6; }
+  .rs-tl-approve { background: #22c55e; }
+  .rs-tl-changes { background: #f59e0b; }
+  .rs-tl-undo { background: #6b7280; }
+
+  .rs-tl-content { flex: 1; }
+
+  .rs-tl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .rs-tl-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+  }
+
+  .rs-tl-date {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .rs-tl-msg {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  /* ─── Changes form in bottom bar ─── */
+  .rs-changes-form {
+    padding: 12px 24px 14px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 0.15s ease;
+  }
+
+  .rs-changes-input {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: white;
+    outline: none;
+    font-family: inherit;
+    resize: none;
+    min-height: 50px;
+    margin-bottom: 8px;
+  }
+
+  .rs-changes-input::placeholder { color: rgba(255,255,255,0.3); }
+  .rs-changes-input:focus { border-color: rgba(251,191,36,0.4); }
+
+  @media (max-width: 768px) {
+    .rs-media-area { padding: 60px 16px 140px; }
+    .rs-media-area img { max-width: 95vw; }
+    .rs-media-area iframe { width: 95vw; }
+    .rs-bar-main { flex-direction: column; align-items: stretch; gap: 10px; }
+    .rs-nav { width: 36px; height: 36px; font-size: 18px; }
+    .rs-nav-prev { left: 8px; }
+    .rs-nav-next { right: 8px; }
   }
 </style>
 </head>
@@ -2317,159 +2507,197 @@ function MediaViewer({ assets, mediaType, reviewMode = false }) {
   );
 }
 
-function ReviewPanel({ task, onUpdate, userEmail, addToast, onClose }) {
+function ReviewScreen({ task, onUpdate, userEmail, addToast, onClose }) {
   const rs = task.review_status || "none";
   const notes = task.review_notes || [];
   const [msg, setMsg] = useState("");
   const [showChangesForm, setShowChangesForm] = useState(false);
+  const [captionExpanded, setCaptionExpanded] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [slideIdx, setSlideIdx] = useState(0);
   const caps = task.captions || {};
   const caption = caps["LinkedIn"] || "";
 
+  // Combine images and docs for media display
+  const images = task.image_urls || [];
+  const docs = task.doc_urls || [];
+  const allMedia = [...images.map(img => ({ ...img, kind: 'image' })), ...docs.map(doc => ({ ...doc, kind: 'doc' }))];
+  const safeIdx = allMedia.length > 0 ? Math.min(slideIdx, allMedia.length - 1) : 0;
+
   const addNote = (type, message) => {
-    const entry = { author: userEmail, date: new Date().toISOString(), type, message };
-    return [...notes, entry];
+    return [...notes, { author: userEmail, date: new Date().toISOString(), type, message }];
   };
 
   const submitForReview = () => {
     onUpdate({ ...task, review_status: "submitted", review_notes: addNote("submit", msg || "Ready for review") });
     setMsg(""); addToast("Submitted for review");
   };
-
   const resubmit = () => {
     onUpdate({ ...task, review_status: "resubmitted", review_notes: addNote("resubmit", msg || "Updated and resubmitted") });
     setMsg(""); addToast("Resubmitted for review");
   };
-
   const approve = () => {
     onUpdate({ ...task, review_status: "approved", review_notes: addNote("approve", msg || "Approved!") });
     setMsg(""); addToast("Post approved!");
   };
-
   const requestChanges = () => {
     onUpdate({ ...task, review_status: "needs_changes", review_notes: addNote("changes", msg) });
     setMsg(""); setShowChangesForm(false); addToast("Changes requested");
   };
-
   const undoReview = () => {
     onUpdate({ ...task, review_status: "none", review_notes: addNote("undo", "Returned to editing") });
     addToast("Returned to editing");
   };
 
+  // Keyboard navigation
+  useEffect(() => {
+    const h = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft' && allMedia.length > 1) setSlideIdx(i => (i - 1 + allMedia.length) % allMedia.length);
+      if (e.key === 'ArrowRight' && allMedia.length > 1) setSlideIdx(i => (i + 1) % allMedia.length);
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [allMedia.length, onClose]);
+
   const isReviewable = rs === "submitted" || rs === "resubmitted";
   const canSubmit = rs === "none";
   const canResubmit = rs === "needs_changes";
-  const images = task.image_urls || [];
 
   const fmtDate = (d) => {
     try { return new Date(d).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); }
     catch { return d; }
   };
 
-  const dotClass = { submit: 'rp-dot-submit', resubmit: 'rp-dot-submit', approve: 'rp-dot-approve', changes: 'rp-dot-changes', undo: 'rp-dot-undo' };
-  const typeLabel = { submit: 'Submitted for review', resubmit: 'Resubmitted', approve: 'Approved', changes: 'Changes requested', undo: 'Returned to editing' };
+  const dotClass = { submit: 'rs-tl-submit', resubmit: 'rs-tl-submit', approve: 'rs-tl-approve', changes: 'rs-tl-changes', undo: 'rs-tl-undo' };
+  const typeLabel = { submit: 'Submitted', resubmit: 'Resubmitted', approve: 'Approved', changes: 'Changes requested', undo: 'Returned to editing' };
+
+  const currentMedia = allMedia[safeIdx];
 
   return (
-    <div className="review-panel">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <span className="rp-section-label" style={{ margin: 0 }}>Review</span>
-        <button className="rp-btn-ghost rp-btn" onClick={onClose} style={{ padding: '4px 8px' }}>{IC.x}</button>
+    <div className="rs-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      {/* Top bar */}
+      <div className="rs-top-bar">
+        <div className="rs-title">
+          <span>{task.title}</span>
+          <span className="rs-title-badge">{task.category}</span>
+          {allMedia.length > 0 && <span className="rs-title-badge">{task.media_type || 'single'}</span>}
+        </div>
+        <button className="rs-close-btn" onClick={onClose}>×</button>
       </div>
 
-      <div className="rp-grid">
-        {/* Left: Media + Caption */}
-        <div>
-          {images.length > 0 && (
-            <div>
-              <div className="rp-section-label">Media</div>
-              <div className="rp-media-strip">
-                {images.map((img, i) => (
-                  <img key={i} src={img.url} className="rp-thumb" alt={img.name || `Image ${i+1}`} />
-                ))}
-              </div>
-            </div>
-          )}
-          <div className="rp-section-label">LinkedIn Caption</div>
-          {caption ? (
-            <div className="rp-caption-block">{caption}</div>
-          ) : (
-            <div className="rp-caption-block" style={{ color: 'var(--color-text-lighter)', fontStyle: 'italic' }}>No caption written yet.</div>
-          )}
-          {caption && (
-            <button className="rp-btn rp-btn-ghost" style={{ marginTop: 6, fontSize: 11 }} onClick={() => { navigator.clipboard.writeText(caption); addToast("Caption copied"); }}>
-              Copy caption
-            </button>
-          )}
+      {/* Media area */}
+      <div className="rs-media-area">
+        {allMedia.length === 0 ? (
+          <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 15, textAlign: 'center' }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>📷</div>
+            No media uploaded yet
+          </div>
+        ) : currentMedia.kind === 'doc' ? (
+          <iframe src={currentMedia.url} title={currentMedia.name || 'Document'} />
+        ) : currentMedia.name && (currentMedia.name.endsWith('.mp4') || currentMedia.name.endsWith('.webm') || currentMedia.name.endsWith('.mov')) ? (
+          <video src={currentMedia.url} controls playsInline />
+        ) : (
+          <img src={currentMedia.url} alt={currentMedia.name || 'Media'} />
+        )}
+
+        {/* Navigation arrows */}
+        {allMedia.length > 1 && (
+          <>
+            <button className="rs-nav rs-nav-prev" onClick={() => setSlideIdx((safeIdx - 1 + allMedia.length) % allMedia.length)}>‹</button>
+            <button className="rs-nav rs-nav-next" onClick={() => setSlideIdx((safeIdx + 1) % allMedia.length)}>›</button>
+          </>
+        )}
+
+        {/* Dot indicators */}
+        {allMedia.length > 1 && (
+          <div className="rs-counter">
+            {allMedia.map((_, i) => (
+              <div key={i} className={`rs-dot ${i === safeIdx ? 'active' : ''}`} onClick={() => setSlideIdx(i)} />
+            ))}
+            <span className="rs-slide-num">{safeIdx + 1}/{allMedia.length}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Bottom bar */}
+      <div className="rs-bottom-bar">
+        <div className="rs-bar-main">
+          {/* Caption */}
+          <div className="rs-caption-area" onClick={() => setCaptionExpanded(!captionExpanded)}>
+            {caption ? (
+              <div className={`rs-caption-preview ${captionExpanded ? 'expanded' : ''}`}>{caption}</div>
+            ) : (
+              <span className="rs-caption-empty">No caption yet</span>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="rs-bar-actions">
+            {caption && (
+              <button className="rs-action rs-action-copy" onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(caption); addToast("Copied"); }}>Copy</button>
+            )}
+
+            {canSubmit && (
+              <button className="rs-action rs-action-submit" onClick={submitForReview}>Submit for Review</button>
+            )}
+
+            {canResubmit && (
+              <button className="rs-action rs-action-submit" onClick={resubmit}>Resubmit</button>
+            )}
+
+            {isReviewable && (
+              <>
+                <button className="rs-action rs-action-approve" onClick={approve}>Approve</button>
+                <button className="rs-action rs-action-changes" onClick={() => setShowChangesForm(!showChangesForm)}>
+                  {showChangesForm ? 'Cancel' : 'Request Changes'}
+                </button>
+              </>
+            )}
+
+            {rs === "approved" && (
+              <span style={{ color: '#22c55e', fontSize: 13, fontWeight: 600, padding: '0 8px' }}>Approved</span>
+            )}
+
+            {rs !== "none" && (
+              <button className="rs-action rs-action-ghost" onClick={undoReview}>Undo</button>
+            )}
+
+            {notes.length > 0 && (
+              <button className="rs-history-btn" onClick={() => setHistoryOpen(!historyOpen)}>
+                History <span className="rs-history-count">{notes.length}</span>
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Right: Actions */}
-        <div>
-          <div className="rp-section-label">Status & Actions</div>
-
-          {canSubmit && (
-            <div>
-              <textarea className="rp-changes-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Optional note for reviewer..." rows={2} />
-              <div className="rp-actions" style={{ marginTop: 8 }}>
-                <button className="rp-btn rp-btn-submit" onClick={submitForReview}>Submit for Review</button>
-              </div>
+        {/* Changes form */}
+        {showChangesForm && (
+          <div className="rs-changes-form">
+            <textarea className="rs-changes-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Describe what needs to change..." rows={2} autoFocus />
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button className="rs-action rs-action-changes" onClick={requestChanges} disabled={!msg.trim()} style={{ fontSize: 12 }}>Send Feedback</button>
+              <button className="rs-action rs-action-ghost" onClick={() => { setShowChangesForm(false); setMsg(""); }}>Cancel</button>
             </div>
-          )}
+          </div>
+        )}
 
-          {canResubmit && (
-            <div>
-              <textarea className="rp-changes-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="What did you change?" rows={2} />
-              <div className="rp-actions" style={{ marginTop: 8 }}>
-                <button className="rp-btn rp-btn-submit" onClick={resubmit}>Resubmit for Review</button>
-              </div>
-            </div>
-          )}
-
-          {isReviewable && !showChangesForm && (
-            <div>
-              <p style={{ fontSize: 13, color: '#3b82f6', fontWeight: 500, marginBottom: 12 }}>This post is awaiting your review.</p>
-              <div className="rp-actions">
-                <button className="rp-btn rp-btn-approve" onClick={approve}>Approve</button>
-                <button className="rp-btn rp-btn-changes" onClick={() => setShowChangesForm(true)}>Request Changes</button>
-                <button className="rp-btn rp-btn-ghost" onClick={undoReview}>Undo</button>
-              </div>
-            </div>
-          )}
-
-          {isReviewable && showChangesForm && (
-            <div className="rp-changes-form">
-              <p style={{ fontSize: 12, fontWeight: 600, color: '#4b5563', marginBottom: 8 }}>What needs to change?</p>
-              <textarea className="rp-changes-input" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Describe the changes needed..." rows={3} autoFocus />
-              <div className="rp-actions">
-                <button className="rp-btn rp-btn-changes" onClick={requestChanges} disabled={!msg.trim()}>Send Feedback</button>
-                <button className="rp-btn rp-btn-ghost" onClick={() => { setShowChangesForm(false); setMsg(""); }}>Cancel</button>
-              </div>
-            </div>
-          )}
-
-          {rs === "approved" && (
-            <div>
-              <p style={{ fontSize: 13, color: '#15803d', fontWeight: 500, marginBottom: 8 }}>This post is approved and ready to publish.</p>
-              <button className="rp-btn rp-btn-ghost" onClick={undoReview}>Undo approval</button>
-            </div>
-          )}
-
-          {/* Timeline */}
-          {notes.length > 0 && (
-            <div className="rp-timeline">
-              <div className="rp-section-label">History</div>
-              {[...notes].reverse().map((n, i) => (
-                <div key={i} className="rp-timeline-item">
-                  <div className={`rp-timeline-dot ${dotClass[n.type] || 'rp-dot-undo'}`} />
-                  <div className="rp-timeline-content">
-                    <div className="rp-timeline-header">
-                      <span className="rp-timeline-author">{typeLabel[n.type] || n.type}</span>
-                      <span className="rp-timeline-date">{fmtDate(n.date)}</span>
-                    </div>
-                    {n.message && <p className="rp-timeline-msg">{n.message}</p>}
+        {/* History drawer */}
+        <div className={`rs-drawer ${historyOpen ? 'open' : ''}`}>
+          <div className="rs-drawer-inner">
+            {[...notes].reverse().map((n, i) => (
+              <div key={i} className="rs-timeline-item">
+                <div className={`rs-tl-dot ${dotClass[n.type] || 'rs-tl-undo'}`} />
+                <div className="rs-tl-content">
+                  <div className="rs-tl-header">
+                    <span className="rs-tl-label">{typeLabel[n.type] || n.type}</span>
+                    <span className="rs-tl-date">{fmtDate(n.date)}</span>
                   </div>
+                  {n.message && <p className="rs-tl-msg">{n.message}</p>}
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -2743,7 +2971,7 @@ function TaskCard({ task, onUpdate, onDelete, categories, isStarred, onToggleSta
         )}
       </div>
       {showReview && (
-        <ReviewPanel task={task} onUpdate={onUpdate} userEmail={userEmail} addToast={addToast} onClose={() => setShowReview(false)} />
+        <ReviewScreen task={task} onUpdate={onUpdate} userEmail={userEmail} addToast={addToast} onClose={() => setShowReview(false)} />
       )}
     </div>
   );
